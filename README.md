@@ -1,4 +1,4 @@
-# Blackpool Assessment — AI REST API
+# Aperture AI — Multi-Modal AI Services Gateway
 
 REST API built with **FastAPI** integrating **Azure OpenAI** (document analysis) and **Deepgram** (speech-to-text / text-to-speech), backed by **PostgreSQL** for request tracking.
 
@@ -132,7 +132,7 @@ Synthesizes text to a downloadable MP3 using **Deepgram Aura-2** (80+ voices, 7 
 curl -X POST http://localhost:8000/tts \
   -H "X-API-Key: your-api-key" \
   -H "Content-Type: application/json" \
-  -d '{"text": "Welcome to Blackpool.", "voice": "aura-2-asteria-en"}' \
+  -d '{"text": "Welcome to Aperture AI.", "voice": "aura-2-asteria-en"}' \
   --output speech.mp3
 ```
 
