@@ -3,7 +3,7 @@ setlocal EnableDelayedExpansion
 cd /d "%~dp0"
 
 :: ─────────────────────────────────────────────────────────────────────────────
-::  Blackpool Assessment — AI API Launcher
+::  Aperture AI — AI API Launcher
 ::  Double-click this file on Windows to start everything automatically.
 ::
 ::  Compose file : infra/docker-compose.yml
@@ -28,7 +28,7 @@ cls
 echo.
 echo %C_CYAN%  ╔══════════════════════════════════════════════════╗%C_RESET%
 echo %C_CYAN%  ║                                                  ║%C_RESET%
-echo %C_CYAN%  ║   Blackpool Assessment — AI API Launcher         ║%C_RESET%
+echo %C_CYAN%  ║   Aperture AI — AI API Launcher                  ║%C_RESET%
 echo %C_CYAN%  ║   FastAPI  ·  Deepgram  ·  Azure OpenAI          ║%C_RESET%
 echo %C_CYAN%  ║                                                  ║%C_RESET%
 echo %C_CYAN%  ╚══════════════════════════════════════════════════╝%C_RESET%
@@ -45,7 +45,7 @@ if %errorlevel% equ 0 (
     echo.
     echo %C_WHITE%    Web UI (main)  →  http://localhost:8000%C_RESET%
     echo %C_WHITE%    Swagger docs   →  http://localhost:8000/docs%C_RESET%
-    echo %C_WHITE%    API Key        →  blackpool-architect-key-2024%C_RESET%
+    echo %C_WHITE%    API Key        →  aperture-architect-key-2024%C_RESET%
     echo.
     echo %C_DIM%    To stop:  double-click stop.bat%C_RESET%
     echo.
@@ -184,7 +184,7 @@ echo %C_GREEN%  The application is LIVE at:%C_RESET%
 echo.
 echo %C_WHITE%    Web UI (main)  →  http://localhost:8000%C_RESET%
 echo %C_WHITE%    Swagger docs   →  http://localhost:8000/docs%C_RESET%
-echo %C_WHITE%    API Key        →  blackpool-architect-key-2024%C_RESET%
+echo %C_WHITE%    API Key        →  aperture-architect-key-2024%C_RESET%
 echo.
 echo %C_DIM%    Services running in background — to stop: double-click stop.bat%C_RESET%
 echo.

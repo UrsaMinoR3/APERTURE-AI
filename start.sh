@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ─────────────────────────────────────────────────────────────────────────────
-#  Blackpool Assessment — AI API Launcher (Mac / Linux)
+#  Aperture AI — AI API Launcher (Mac / Linux)
 #  Run with:  chmod +x start.sh && ./start.sh
 #
 #  Compose file : infra/docker-compose.yml
@@ -20,7 +20,7 @@ DC="docker compose -f infra/docker-compose.yml --env-file infra/.env"
 echo ""
 echo -e "${CYAN}  ╔══════════════════════════════════════════════════╗${NC}"
 echo -e "${CYAN}  ║                                                  ║${NC}"
-echo -e "${CYAN}  ║   Blackpool Assessment — AI API Launcher         ║${NC}"
+echo -e "${CYAN}  ║   Aperture AI — AI API Launcher                  ║${NC}"
 echo -e "${CYAN}  ║   FastAPI  ·  Deepgram  ·  Azure OpenAI          ║${NC}"
 echo -e "${CYAN}  ║                                                  ║${NC}"
 echo -e "${CYAN}  ╚══════════════════════════════════════════════════╝${NC}"
@@ -36,7 +36,7 @@ if curl -sf http://localhost:8000/health >/dev/null 2>&1; then
     echo ""
     echo -e "${WHITE}    Web UI (main)  →  http://localhost:8000${NC}"
     echo -e "${WHITE}    Swagger docs   →  http://localhost:8000/docs${NC}"
-    echo -e "${WHITE}    API Key        →  blackpool-architect-key-2024${NC}"
+    echo -e "${WHITE}    API Key        →  aperture-architect-key-2024${NC}"
     echo ""
     echo -e "${DIM}    To stop:  $DC down${NC}"
     echo ""
@@ -141,7 +141,7 @@ echo -e "${GREEN}  The application is LIVE at:${NC}"
 echo ""
 echo -e "${WHITE}    Web UI (main)  →  http://localhost:8000${NC}"
 echo -e "${WHITE}    Swagger docs   →  http://localhost:8000/docs${NC}"
-echo -e "${WHITE}    API Key        →  blackpool-architect-key-2024${NC}"
+echo -e "${WHITE}    API Key        →  aperture-architect-key-2024${NC}"
 echo ""
 echo -e "${DIM}    To stop:  $DC down${NC}"
 echo -e "${CYAN}  ══════════════════════════════════════════════════${NC}"

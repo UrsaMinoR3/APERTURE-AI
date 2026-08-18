@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Blackpool Assessment</title>
+  <title>Aperture AI</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -887,7 +887,7 @@
   <button class="hamburger" onclick="openSidebar()" aria-label="Menu">
     <span></span><span></span><span></span>
   </button>
-  <span class="site-title"><span>Blackpool</span> Assessment</span>
+  <span class="site-title"><span>Aperture</span> AI</span>
   <span class="header-badge">AI Services API</span>
 </header>
 
@@ -896,7 +896,7 @@
 
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
-    <span class="sidebar-logo"><span>Blackpool</span> Assessment</span>
+    <span class="sidebar-logo"><span>Aperture</span> AI</span>
     <button class="close-btn" onclick="closeSidebar()">×</button>
   </div>
   <nav>
@@ -938,7 +938,7 @@
   <div class="api-key-bar">
     <div class="api-key-inner">
       <label for="globalApiKey">🔑 API Key</label>
-      <input type="text" id="globalApiKey" value="blackpool-architect-key-2024" />
+      <input type="text" id="globalApiKey" value="" placeholder="Paste your API key here" />
     </div>
   </div>
 
@@ -1467,9 +1467,8 @@
       <div class="doc-auth-bar">
         <strong>Every request</strong> to this API (except <strong>/health</strong>) requires an API Key sent as a header.<br><br>
         An API Key is a secret string that acts as your password. You include it on every single request so the server knows the request is legitimate and not from a random person on the internet.<br><br>
-        <strong>Header name:</strong> <code style="background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px">X-API-Key</code> &nbsp;
-        <strong>Value:</strong> <code style="background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px">blackpool-architect-key-2024</code><br><br>
-        If you forget to include it, or send the wrong value, the API immediately returns <strong>401 Unauthorized</strong> and does not process your request at all. On this website, the key is already pre-filled in the 🔑 field at the top — you never need to type it manually here.
+        <strong>Header name:</strong> <code style="background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px">X-API-Key</code><br><br>
+        If you forget to include it, or send the wrong value, the API immediately returns <strong>401 Unauthorized</strong> and does not process your request at all. On this website, paste your key into the 🔑 field at the top of the page — it's not pre-filled, since this is a public demo and the key is private.
       </div>
       <a class="doc-swagger-btn" href="/docs" target="_blank">
         🔗 Open Interactive Swagger Docs (full technical reference) ↗
@@ -1487,7 +1486,7 @@
             <div class="doc-step-num">1</div>
             <div class="doc-step-content">
               <div class="doc-step-title">Make sure the API key is set</div>
-              <div class="doc-step-desc">At the top of the page you'll see a 🔑 field. It should already say <code>blackpool-architect-key-2024</code>. If it's empty, type that value in.</div>
+              <div class="doc-step-desc">At the top of the page you'll see a 🔑 field. Paste your API key into it — this is a public demo, so it isn't pre-filled for you.</div>
             </div>
           </div>
           <div class="doc-step">
@@ -1526,13 +1525,13 @@
         <div class="doc-code-wrap" style="margin-top:10px">
           <div class="doc-code-label">Speech-to-Text — upload an audio file</div>
           <div class="doc-code">curl -X POST http://localhost:8000/stt \
-  -H "X-API-Key: blackpool-architect-key-2024" \
+  -H "X-API-Key: your-api-key" \
   -F "audio=@your-recording.mp3"</div>
         </div>
         <div class="doc-code-wrap" style="margin-top:10px">
           <div class="doc-code-label">Text-to-Speech — convert text to audio (saves as output.mp3)</div>
           <div class="doc-code">curl -X POST http://localhost:8000/tts \
-  -H "X-API-Key: blackpool-architect-key-2024" \
+  -H "X-API-Key: your-api-key" \
   -H "Content-Type: application/json" \
   -d '{"text": "Hello, this is a test.", "voice": "aura-2-asteria-en"}' \
   --output output.mp3</div>
@@ -1540,13 +1539,13 @@
         <div class="doc-code-wrap" style="margin-top:10px">
           <div class="doc-code-label">Document Analysis — upload a document image</div>
           <div class="doc-code">curl -X POST http://localhost:8000/idp/analyze \
-  -H "X-API-Key: blackpool-architect-key-2024" \
+  -H "X-API-Key: your-api-key" \
   -F "image=@passport.jpg"</div>
         </div>
         <div class="doc-code-wrap" style="margin-top:10px">
           <div class="doc-code-label">View request logs</div>
           <div class="doc-code">curl http://localhost:8000/logs \
-  -H "X-API-Key: blackpool-architect-key-2024"</div>
+  -H "X-API-Key: your-api-key"</div>
         </div>
       </div>
 
@@ -1560,7 +1559,7 @@
           <div class="doc-code">import requests
 
 BASE = "http://localhost:8000"
-HEADERS = {"X-API-Key": "blackpool-architect-key-2024"}
+HEADERS = {"X-API-Key": "your-api-key"}
 
 # ── Speech-to-Text ──────────────────────────────────────────────
 with open("recording.mp3", "rb") as audio_file:
@@ -1760,7 +1759,7 @@ for field, value in data["extracted_fields"].items():
           <div class="doc-code-wrap" style="margin-top:16px">
             <div class="doc-code-label">Example request body (JSON)</div>
             <div class="doc-code">{
-  "text": "Bienvenido a Blackpool. ¿En qué puedo ayudarte hoy?",
+  "text": "Bienvenido a Aperture AI. ¿En qué puedo ayudarte hoy?",
   "voice": "aura-2-andromeda-es"   ← Spanish female voice
 }
 // Response: binary MP3 data (not JSON)</div>
@@ -2039,7 +2038,7 @@ for field, value in data["extracted_fields"].items():
             <tr>
               <td class="error-4xx">401</td>
               <td><strong>Unauthorized</strong> — the X-API-Key header is missing or the key value is wrong.</td>
-              <td>Add the header <code>X-API-Key: blackpool-architect-key-2024</code> to your request. On this website, check the 🔑 field at the top.</td>
+              <td>Add the header <code>X-API-Key: your-api-key</code> to your request. On this website, check the 🔑 field at the top.</td>
             </tr>
             <tr>
               <td class="error-4xx">404</td>
@@ -3140,7 +3139,7 @@ for field, value in data["extracted_fields"].items():
   // The browser's "Save as PDF" option in the print dialog produces the PDF.
   function downloadArchPDF() {
     const prev = document.title;
-    document.title = 'Architecture Point 2 — Blackpool Assessment';
+    document.title = 'Architecture Point 2 — Aperture AI';
     window.print();
     document.title = prev;
   }

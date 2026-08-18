@@ -3,7 +3,7 @@ cd /d "%~dp0"
 reg add HKCU\Console /v VirtualTerminalLevel /t REG_DWORD /d 1 /f >nul 2>&1
 
 echo.
-echo [36m  Blackpool Assessment — Stopping services...[0m
+echo [36m  Aperture AI — Stopping services...[0m
 echo.
 
 docker compose -f infra\docker-compose.yml --env-file infra\.env down
