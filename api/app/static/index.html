@@ -249,6 +249,16 @@
     }
 
     .panel-header { margin-bottom: var(--space-8); }
+    .back-home-btn {
+      display: inline-flex; align-items: center; gap: var(--space-2);
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--text2); text-decoration: none;
+      padding: var(--space-2) var(--space-4); border-radius: var(--radius-full);
+      font-size: 0.78rem; font-weight: 500; cursor: pointer;
+      margin-bottom: var(--space-6);
+      transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out);
+    }
+    .back-home-btn:hover { color: var(--accent); border-color: var(--accent); }
     .panel-header h1 {
       font-size: var(--text-xl); font-weight: var(--weight-semibold); margin-bottom: 6px;
       letter-spacing: -0.01em;
@@ -945,6 +955,7 @@
   <!-- ── STT Panel ── -->
   <div class="panel" id="panel-stt">
     <div class="panel-header">
+      <a class="back-home-btn" onclick="showPanel('home')">← Home</a>
       <h1>🎙️ Speech-to-Text</h1>
       <p>Upload an MP3 or WAV audio file. Deepgram Nova-2 will transcribe it with speaker diarization and language detection.</p>
     </div>
@@ -1003,6 +1014,7 @@
   <!-- ── TTS Panel ── -->
   <div class="panel" id="panel-tts">
     <div class="panel-header">
+      <a class="back-home-btn" onclick="showPanel('home')">← Home</a>
       <h1>🔊 Text-to-Speech</h1>
       <p>Type your text below and choose a voice. Deepgram Aura will synthesize it into an MP3 you can play and download.</p>
     </div>
@@ -1060,6 +1072,7 @@
   <!-- ── IDP Panel ── -->
   <div class="panel" id="panel-idp">
     <div class="panel-header">
+      <a class="back-home-btn" onclick="showPanel('home')">← Home</a>
       <h1>📄 Document Analysis</h1>
       <p>Upload a JPG or PNG image of any document — ID card, passport, invoice, receipt. GPT-4o will extract all visible fields.</p>
     </div>
@@ -1114,6 +1127,7 @@
   <!-- ── Database Panel ── -->
   <div class="panel panel--wide" id="panel-db">
     <div class="panel-header">
+      <a class="back-home-btn" onclick="showPanel('home')">← Home</a>
       <h1>🗄️ Database</h1>
       <p>Live view of all API requests tracked in PostgreSQL — every field required by the assessment.</p>
     </div>
@@ -1160,6 +1174,7 @@
   <!-- ── Documentation Panel ── -->
   <div class="panel" id="panel-docs">
     <div class="panel-header">
+      <a class="back-home-btn" onclick="showPanel('home')">← Home</a>
       <h1>📖 Documentation</h1>
       <p>A complete guide for someone who has never built with an API before — from first concepts to running your first request.</p>
     </div>
@@ -1880,6 +1895,7 @@ print("Logged requests:", len(response.json()))</div>
   <!-- ── Architecture Panel ── -->
   <div class="panel panel--wide" id="panel-architecture">
     <div class="panel-header">
+      <a class="back-home-btn" onclick="showPanel('home')">← Home</a>
       <h1>🧩 Architecture</h1>
       <p>One FastAPI service sits between the browser and two external AI providers, logging every
       call to a managed Postgres database. Three endpoints are open to anyone; only
@@ -2033,6 +2049,7 @@ print("Logged requests:", len(response.json()))</div>
   <!-- ── Health Panel ── -->
   <div class="panel" id="panel-health">
     <div class="panel-header">
+      <a class="back-home-btn" onclick="showPanel('home')">← Home</a>
       <h1>💚 Health Check</h1>
       <p>Verify the API service is running and reachable.</p>
     </div>
