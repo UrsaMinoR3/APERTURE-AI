@@ -4,7 +4,6 @@ import time
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from sqlalchemy.orm import Session
 
-from ..core.auth import verify_api_key
 from ..core.database import get_db
 from ..models.request_log import RequestLog
 from ..schemas.stt import SpeakerSegment, STTResponse
@@ -90,7 +89,6 @@ def _log(db: Session, endpoint: str, input_data: str, output_ref: str,
 )
 async def speech_to_text(
     audio: UploadFile = File(..., description="Audio file (MP3 or WAV)"),
-    _: str = Depends(verify_api_key),
     db: Session = Depends(get_db),
 ) -> STTResponse:
     filename = audio.filename or "unknown"

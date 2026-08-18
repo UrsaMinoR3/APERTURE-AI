@@ -721,13 +721,12 @@
     .error-5xx { color: var(--red); }
     .error-2xx { color: var(--green); }
 
-    /* API key bar at top of page */
-    .api-key-bar {
-      width: 100%; max-width: 720px;
-      padding: var(--space-3) var(--space-6) 0;
+    /* Scoped key field — Database panel only (the one protected endpoint) */
+    .db-key-card {
+      margin-bottom: var(--space-4);
     }
     .api-key-inner {
-      background: var(--surface);
+      background: var(--surface2);
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
       padding: var(--space-3) var(--space-4);
@@ -737,7 +736,7 @@
     .api-key-inner:focus-within { border-color: var(--accent); }
     .api-key-inner label { margin: 0; font-size: var(--text-sm); white-space: nowrap; color: var(--text2); }
     .api-key-inner input {
-      flex: 1; background: var(--surface2);
+      flex: 1; background: var(--surface3);
       border: 1px solid var(--border); border-radius: var(--radius-sm);
       color: var(--text2); font-size: var(--text-sm); padding: 7px 10px;
       font-family: var(--font-mono);
@@ -751,7 +750,30 @@
       min-width: 32px; min-height: 32px; border-radius: var(--radius-sm);
       transition: opacity var(--duration-fast) var(--ease-out), background var(--duration-fast) var(--ease-out);
     }
-    .api-key-toggle:hover { opacity: 1; background: var(--surface2); }
+    .api-key-toggle:hover { opacity: 1; background: var(--surface3); }
+
+    /* ── Home panel ───────────────────────────────────── */
+    .service-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-4); margin-top: var(--space-2);
+    }
+    @media (max-width: 640px) { .service-grid { grid-template-columns: 1fr; } }
+
+    .service-card {
+      display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-2);
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: var(--space-6); text-align: left; cursor: pointer; width: 100%;
+      font-size: var(--text-base); color: var(--text);
+      transition: border-color var(--duration-base) var(--ease-out), transform var(--duration-base) var(--ease-out);
+    }
+    .service-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .service-card-icon { font-size: 1.6rem; }
+    .service-card-title { font-size: var(--text-base); font-weight: var(--weight-semibold); color: var(--text); }
+    .service-card-desc { font-size: var(--text-sm); color: var(--text2); line-height: 1.5; }
+    .service-card-arrow {
+      margin-top: auto; padding-top: var(--space-2);
+      font-size: var(--text-sm); color: var(--accent); font-weight: var(--weight-medium);
+    }
   </style>
 </head>
 <body>
@@ -774,8 +796,11 @@
     <button class="close-btn" onclick="closeSidebar()">×</button>
   </div>
   <nav>
-    <div class="nav-label">AI Services</div>
-    <a onclick="showPanel('stt')" id="nav-stt" class="active">
+    <a onclick="showPanel('home')" id="nav-home" class="active">
+      <span class="icon">🏠</span> Home
+    </a>
+    <div class="nav-label" style="margin-top:16px;">AI Services</div>
+    <a onclick="showPanel('stt')" id="nav-stt">
       <span class="icon">🎙️</span> Speech-to-Text
     </a>
     <a onclick="showPanel('tts')" id="nav-tts">
@@ -801,17 +826,37 @@
 <!-- ── Main ──────────────────────────────────────────────── -->
 <main>
 
-  <!-- API key bar (global) -->
-  <div class="api-key-bar">
-    <div class="api-key-inner">
-      <label for="globalApiKey">🔑 API Key</label>
-      <input type="password" id="globalApiKey" value="" placeholder="Paste your API key here" autocomplete="off" />
-      <button type="button" id="toggleApiKeyBtn" class="api-key-toggle" onclick="toggleApiKeyVisibility()" aria-label="Show API key" title="Show/hide API key">👁️</button>
+  <!-- ── Home Panel ── -->
+  <div class="panel active" id="panel-home">
+    <div class="panel-header">
+      <h1>👋 Welcome to <span style="color:var(--accent)">Aperture</span> AI</h1>
+      <p>One API for speech and document intelligence — transcribe audio, synthesize natural speech, and extract structured data from documents, powered by Deepgram and OpenAI.</p>
+    </div>
+
+    <div class="service-grid">
+      <button class="service-card" onclick="showPanel('stt')">
+        <span class="service-card-icon">🎙️</span>
+        <span class="service-card-title">Speech-to-Text</span>
+        <span class="service-card-desc">Transcribe audio with speaker diarization and automatic language detection.</span>
+        <span class="service-card-arrow">Open →</span>
+      </button>
+      <button class="service-card" onclick="showPanel('tts')">
+        <span class="service-card-icon">🔊</span>
+        <span class="service-card-title">Text-to-Speech</span>
+        <span class="service-card-desc">Turn written text into natural-sounding speech across 80+ AI voices.</span>
+        <span class="service-card-arrow">Open →</span>
+      </button>
+      <button class="service-card" onclick="showPanel('idp')">
+        <span class="service-card-icon">📄</span>
+        <span class="service-card-title">Document Analysis</span>
+        <span class="service-card-desc">Extract structured fields from IDs, passports, invoices and receipts.</span>
+        <span class="service-card-arrow">Open →</span>
+      </button>
     </div>
   </div>
 
   <!-- ── STT Panel ── -->
-  <div class="panel active" id="panel-stt">
+  <div class="panel" id="panel-stt">
     <div class="panel-header">
       <h1>🎙️ Speech-to-Text</h1>
       <p>Upload an MP3 or WAV audio file. Deepgram Nova-2 will transcribe it with speaker diarization and language detection.</p>
@@ -986,6 +1031,15 @@
       <p>Live view of all API requests tracked in PostgreSQL — every field required by the assessment.</p>
     </div>
 
+    <div class="card db-key-card">
+      <div class="card-title">Admin Access</div>
+      <div class="api-key-inner">
+        <label for="dbApiKey">🔑 API Key</label>
+        <input type="password" id="dbApiKey" value="" placeholder="Paste your admin API key here" autocomplete="off" />
+        <button type="button" id="toggleDbApiKeyBtn" class="api-key-toggle" onclick="toggleDbApiKeyVisibility()" aria-label="Show API key" title="Show/hide API key">👁️</button>
+      </div>
+    </div>
+
     <div class="db-stats" id="db-stats"></div>
 
     <div class="card" style="padding:0;overflow:hidden;">
@@ -1092,7 +1146,7 @@
           <div class="doc-concept-body">
             Headers are <strong>labels that travel with every request</strong>, invisible to the user but read by the server. Like writing your name and address on an envelope before mailing it — the package has the content, the envelope has the metadata.
             <br><br>
-            This API uses a header called <strong>X-API-Key</strong> to verify your identity on every request.
+            This API uses a header called <strong>X-API-Key</strong> on the one endpoint that still requires it — the request logs / database endpoint.
           </div>
         </div>
 
@@ -1128,10 +1182,10 @@
     <div class="doc-section">
       <div class="card-title">🔐 Authentication — How to Prove You Have Access</div>
       <div class="doc-auth-bar">
-        <strong>Every request</strong> to this API (except <strong>/health</strong>) requires an API Key sent as a header.<br><br>
-        An API Key is a secret string that acts as your password. You include it on every single request so the server knows the request is legitimate and not from a random person on the internet.<br><br>
+        <strong>Speech-to-Text, Text-to-Speech and Document Analysis are open endpoints</strong> — no API key required. They're built for this public demo, so you can call <code style="background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px">/stt</code>, <code style="background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px">/tts</code> and <code style="background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px">/idp/analyze</code> directly, with no header at all.<br><br>
+        The <strong>request logs / database endpoint</strong> (<code style="background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px">/logs</code>) is the one exception — it's an admin/owner-only view, so it still requires an API Key sent as a header.<br><br>
         <strong>Header name:</strong> <code style="background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px">X-API-Key</code><br><br>
-        If you forget to include it, or send the wrong value, the API immediately returns <strong>401 Unauthorized</strong> and does not process your request at all. On this website, paste your key into the 🔑 field at the top of the page — it's not pre-filled, since this is a public demo and the key is private.
+        If you forget to include it on <code style="background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px">/logs</code>, or send the wrong value, the API immediately returns <strong>401 Unauthorized</strong> and does not process the request. On this website, paste your key into the 🔑 field at the top of the <strong>Database</strong> panel — it's not pre-filled, since that key is private.
       </div>
       <a class="doc-swagger-btn" href="/docs" target="_blank">
         🔗 Open Interactive Swagger Docs (full technical reference) ↗
@@ -1148,8 +1202,8 @@
           <div class="doc-step">
             <div class="doc-step-num">1</div>
             <div class="doc-step-content">
-              <div class="doc-step-title">Make sure the API key is set</div>
-              <div class="doc-step-desc">At the top of the page you'll see a 🔑 field. Paste your API key into it — this is a public demo, so it isn't pre-filled for you.</div>
+              <div class="doc-step-title">No key needed for Speech-to-Text, Text-to-Speech or Document Analysis</div>
+              <div class="doc-step-desc">These three services are open — just pick one and try it. Only the <strong>Database</strong> panel has its own 🔑 field, since that view is admin-only.</div>
             </div>
           </div>
           <div class="doc-step">
@@ -1186,23 +1240,20 @@
           <div class="doc-code">curl http://localhost:8000/health</div>
         </div>
         <div class="doc-code-wrap" style="margin-top:10px">
-          <div class="doc-code-label">Speech-to-Text — upload an audio file</div>
+          <div class="doc-code-label">Speech-to-Text — upload an audio file (no key needed)</div>
           <div class="doc-code">curl -X POST http://localhost:8000/stt \
-  -H "X-API-Key: your-api-key" \
   -F "audio=@your-recording.mp3"</div>
         </div>
         <div class="doc-code-wrap" style="margin-top:10px">
-          <div class="doc-code-label">Text-to-Speech — convert text to audio (saves as output.mp3)</div>
+          <div class="doc-code-label">Text-to-Speech — convert text to audio (no key needed, saves as output.mp3)</div>
           <div class="doc-code">curl -X POST http://localhost:8000/tts \
-  -H "X-API-Key: your-api-key" \
   -H "Content-Type: application/json" \
   -d '{"text": "Hello, this is a test.", "voice": "aura-2-asteria-en"}' \
   --output output.mp3</div>
         </div>
         <div class="doc-code-wrap" style="margin-top:10px">
-          <div class="doc-code-label">Document Analysis — upload a document image</div>
+          <div class="doc-code-label">Document Analysis — upload a document image (no key needed)</div>
           <div class="doc-code">curl -X POST http://localhost:8000/idp/analyze \
-  -H "X-API-Key: your-api-key" \
   -F "image=@passport.jpg"</div>
         </div>
         <div class="doc-code-wrap" style="margin-top:10px">
@@ -1222,13 +1273,12 @@
           <div class="doc-code">import requests
 
 BASE = "http://localhost:8000"
-HEADERS = {"X-API-Key": "your-api-key"}
+# None of these three calls need an API key — they're open endpoints.
 
 # ── Speech-to-Text ──────────────────────────────────────────────
 with open("recording.mp3", "rb") as audio_file:
     response = requests.post(
         f"{BASE}/stt",
-        headers=HEADERS,
         files={"audio": audio_file}   # file upload, not JSON
     )
 data = response.json()
@@ -1239,7 +1289,6 @@ print("Duration:", data["duration"], "seconds")
 # ── Text-to-Speech ──────────────────────────────────────────────
 response = requests.post(
     f"{BASE}/tts",
-    headers=HEADERS,
     json={                            # JSON body
         "text": "Hello! This is a test of the text to speech system.",
         "voice": "aura-2-asteria-en"
@@ -1253,14 +1302,20 @@ print("Audio saved to output.mp3")
 with open("document.jpg", "rb") as image_file:
     response = requests.post(
         f"{BASE}/idp/analyze",
-        headers=HEADERS,
         files={"image": image_file}   # file upload, not JSON
     )
 data = response.json()
 print("Document type:", data["document_type"])
 print("Confidence:", data["confidence"])
 for field, value in data["extracted_fields"].items():
-    print(f"  {field}: {value}")</div>
+    print(f"  {field}: {value}")
+
+# ── Request logs (the one endpoint that still needs a key) ──────
+response = requests.get(
+    f"{BASE}/logs",
+    headers={"X-API-Key": "your-api-key"}
+)
+print("Logged requests:", len(response.json()))</div>
         </div>
         <div class="doc-note" style="margin-top:12px">
           <span class="doc-note-icon">💡</span>
@@ -1287,8 +1342,6 @@ for field, value in data["extracted_fields"].items():
           <div class="doc-flow">
             <div class="doc-flow-step">🎵 Your MP3/WAV file</div>
             <div class="doc-flow-arrow">→</div>
-            <div class="doc-flow-step">🔐 API Key check</div>
-            <div class="doc-flow-arrow">→</div>
             <div class="doc-flow-step">☁️ Deepgram Nova-2</div>
             <div class="doc-flow-arrow">→</div>
             <div class="doc-flow-step">📝 Transcript + speakers</div>
@@ -1301,7 +1354,7 @@ for field, value in data["extracted_fields"].items():
               <div class="doc-box-label">What you send</div>
               <ul>
                 <li><span><strong>audio</strong> — the file itself (MP3 or WAV, max 25 MB). This is sent as a <em>file attachment</em>, exactly like attaching a file to an email — not as JSON text.</span></li>
-                <li><span><strong>X-API-Key</strong> header — your key. Without this, the request is rejected before the file is even looked at.</span></li>
+                <li><span>This is an open endpoint — <strong>no API key required</strong>.</span></li>
               </ul>
             </div>
             <div class="doc-box">
@@ -1393,8 +1446,6 @@ for field, value in data["extracted_fields"].items():
           <div class="doc-flow">
             <div class="doc-flow-step">✍️ Your text + voice choice</div>
             <div class="doc-flow-arrow">→</div>
-            <div class="doc-flow-step">🔐 API Key check</div>
-            <div class="doc-flow-arrow">→</div>
             <div class="doc-flow-step">☁️ Deepgram Aura-2</div>
             <div class="doc-flow-arrow">→</div>
             <div class="doc-flow-step">🎧 Binary MP3 audio</div>
@@ -1408,6 +1459,7 @@ for field, value in data["extracted_fields"].items():
               <ul>
                 <li><span><strong>text</strong> — the words to be spoken. Can be 1 character to 2,000 characters. Supports any language in the Aura-2 voice list.</span></li>
                 <li><span><strong>voice</strong> — (optional) the voice ID to use. Example: <code>aura-2-asteria-en</code>. If you omit this field, the API uses Asteria (English female) as the default. The full list of 80+ voices covers English, Spanish, German, Dutch, Italian, French, and Japanese.</span></li>
+                <li><span>This is an open endpoint — <strong>no API key required</strong>.</span></li>
               </ul>
             </div>
             <div class="doc-box">
@@ -1493,8 +1545,6 @@ for field, value in data["extracted_fields"].items():
           <div class="doc-flow">
             <div class="doc-flow-step">🖼️ Document photo</div>
             <div class="doc-flow-arrow">→</div>
-            <div class="doc-flow-step">🔐 API Key check</div>
-            <div class="doc-flow-arrow">→</div>
             <div class="doc-flow-step">☁️ GPT-4o Vision</div>
             <div class="doc-flow-arrow">→</div>
             <div class="doc-flow-step">📋 Fields + bounding boxes</div>
@@ -1507,7 +1557,7 @@ for field, value in data["extracted_fields"].items():
               <div class="doc-box-label">What you send</div>
               <ul>
                 <li><span><strong>image</strong> — the document photo (JPG or PNG only, max 10 MB). Must be a real file upload — not a URL, not base64 text. Just the file itself.</span></li>
-                <li><span><strong>X-API-Key</strong> header — your key.</span></li>
+                <li><span>This is an open endpoint — <strong>no API key required</strong>.</span></li>
                 <li><span>The image quality matters: blurry, dark, or heavily cropped images will reduce confidence and may miss fields. A clear, flat-angle photo in good lighting gives the best results.</span></li>
               </ul>
             </div>
@@ -1700,8 +1750,8 @@ for field, value in data["extracted_fields"].items():
             </tr>
             <tr>
               <td class="error-4xx">401</td>
-              <td><strong>Unauthorized</strong> — the X-API-Key header is missing or the key value is wrong.</td>
-              <td>Add the header <code>X-API-Key: your-api-key</code> to your request. On this website, check the 🔑 field at the top.</td>
+              <td><strong>Unauthorized</strong> — only applies to <code>/logs</code>. The X-API-Key header is missing or the key value is wrong.</td>
+              <td>Add the header <code>X-API-Key: your-api-key</code> to your request. On this website, check the 🔑 field in the Database panel.</td>
             </tr>
             <tr>
               <td class="error-4xx">404</td>
@@ -1802,14 +1852,14 @@ for field, value in data["extracted_fields"].items():
     closeSidebar();
   }
 
-  // ── API key helper ───────────────────────────────────────
-  function apiKey() {
-    return document.getElementById('globalApiKey').value.trim();
+  // ── Database panel API key helper (the only endpoint still protected) ──
+  function dbApiKey() {
+    return document.getElementById('dbApiKey').value.trim();
   }
 
-  function toggleApiKeyVisibility() {
-    const input = document.getElementById('globalApiKey');
-    const btn = document.getElementById('toggleApiKeyBtn');
+  function toggleDbApiKeyVisibility() {
+    const input = document.getElementById('dbApiKey');
+    const btn = document.getElementById('toggleDbApiKeyBtn');
     const hidden = input.type === 'password';
     input.type = hidden ? 'text' : 'password';
     btn.textContent = hidden ? '🙈' : '👁️';
@@ -1853,7 +1903,6 @@ for field, value in data["extracted_fields"].items():
     try {
       const res = await fetch('/stt', {
         method: 'POST',
-        headers: { 'X-API-Key': apiKey() },
         body: form,
       });
       const data = await res.json();
@@ -2200,7 +2249,7 @@ for field, value in data["extracted_fields"].items():
     try {
       const res = await fetch('/tts', {
         method: 'POST',
-        headers: { 'X-API-Key': apiKey(), 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text, voice }),
       });
       if (!res.ok) {
@@ -2259,7 +2308,6 @@ for field, value in data["extracted_fields"].items():
     try {
       const res = await fetch('/idp/analyze', {
         method: 'POST',
-        headers: { 'X-API-Key': apiKey() },
         body: form,
       });
       const data = await res.json();
@@ -2448,7 +2496,7 @@ for field, value in data["extracted_fields"].items():
     tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:var(--text2);padding:32px"><span class="spinner" style="border-color:rgba(255,255,255,.2);border-top-color:var(--accent)"></span></td></tr>`;
 
     try {
-      const res  = await fetch('/logs?limit=200', { headers: { 'X-API-Key': apiKey() } });
+      const res  = await fetch('/logs?limit=200', { headers: { 'X-API-Key': dbApiKey() } });
       const rows = await res.json();
       if (!res.ok) throw new Error(rows.detail || res.statusText);
 

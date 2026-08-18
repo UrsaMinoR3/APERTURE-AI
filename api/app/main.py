@@ -11,11 +11,12 @@ from .routers import idp, logs, stt, tts
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
-    title="AI Technical Assessment API",
+    title="Aperture AI",
     description=(
         "REST API integrating **Azure OpenAI** and **Deepgram** for voice processing "
         "and intelligent document analysis.\n\n"
-        "All endpoints require the `X-API-Key` header."
+        "Speech-to-Text, Text-to-Speech, and Document Analysis are open, no API key "
+        "required. The `/logs` endpoint (request history) requires the `X-API-Key` header."
     ),
     version="1.0.0",
 )

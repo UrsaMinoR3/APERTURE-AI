@@ -3,7 +3,6 @@ import time
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from sqlalchemy.orm import Session
 
-from ..core.auth import verify_api_key
 from ..core.database import get_db
 from ..models.request_log import RequestLog
 from ..schemas.idp import IDPResponse
@@ -23,7 +22,6 @@ ALLOWED_MIMETYPES = {"image/jpeg", "image/jpg", "image/png"}
 )
 async def analyze_document_endpoint(
     image: UploadFile = File(..., description="Document image (JPG or PNG)"),
-    _: str = Depends(verify_api_key),
     db: Session = Depends(get_db),
 ) -> IDPResponse:
     filename = image.filename or "unknown"

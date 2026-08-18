@@ -6,7 +6,6 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 
-from ..core.auth import verify_api_key
 from ..core.database import get_db
 from ..models.request_log import RequestLog
 from ..schemas.tts import TTSRequest
@@ -25,7 +24,6 @@ router = APIRouter()
 )
 async def text_to_speech(
     request: TTSRequest,
-    _: str = Depends(verify_api_key),
     db: Session = Depends(get_db),
 ) -> StreamingResponse:
     start = time.perf_counter()
