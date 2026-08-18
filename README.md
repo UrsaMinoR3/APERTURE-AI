@@ -47,8 +47,8 @@ The script checks Docker, verifies credentials, builds the containers, waits for
 
 ```bash
 # 1. Clone and enter the repo
-git clone https://github.com/UrsaMinoR3/ai-technical-assessment.git
-cd ai-technical-assessment
+git clone https://github.com/UrsaMinoR3/aperture-ai.git
+cd aperture-ai
 
 # 2. Set up credentials
 cp infra/.env.example infra/.env
@@ -209,7 +209,7 @@ docker compose -f infra/docker-compose.yml --env-file infra/.env up --build
 ## Project Structure
 
 ```
-ai-technical-assessment/
+aperture-ai/
 ├── api/
 │   ├── app/
 │   │   ├── core/           # Config, auth, database connection
