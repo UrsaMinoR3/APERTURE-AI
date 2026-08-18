@@ -854,6 +854,11 @@
       font-family: monospace;
     }
     .api-key-inner input:focus { color: var(--text); border-color: var(--accent); }
+    .api-key-toggle {
+      background: none; border: none; cursor: pointer;
+      font-size: 0.95rem; padding: 4px 6px; opacity: 0.7; line-height: 1;
+    }
+    .api-key-toggle:hover { opacity: 1; }
   </style>
 </head>
 <body>
@@ -907,7 +912,8 @@
   <div class="api-key-bar">
     <div class="api-key-inner">
       <label for="globalApiKey">🔑 API Key</label>
-      <input type="text" id="globalApiKey" value="" placeholder="Paste your API key here" />
+      <input type="password" id="globalApiKey" value="" placeholder="Paste your API key here" autocomplete="off" />
+      <button type="button" id="toggleApiKeyBtn" class="api-key-toggle" onclick="toggleApiKeyVisibility()" aria-label="Show API key" title="Show/hide API key">👁️</button>
     </div>
   </div>
 
@@ -1906,6 +1912,15 @@ for field, value in data["extracted_fields"].items():
   // ── API key helper ───────────────────────────────────────
   function apiKey() {
     return document.getElementById('globalApiKey').value.trim();
+  }
+
+  function toggleApiKeyVisibility() {
+    const input = document.getElementById('globalApiKey');
+    const btn = document.getElementById('toggleApiKeyBtn');
+    const hidden = input.type === 'password';
+    input.type = hidden ? 'text' : 'password';
+    btn.textContent = hidden ? '🙈' : '👁️';
+    btn.setAttribute('aria-label', hidden ? 'Hide API key' : 'Show API key');
   }
 
   // ── JSON toggle ──────────────────────────────────────────
