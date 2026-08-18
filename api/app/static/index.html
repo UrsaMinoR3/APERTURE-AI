@@ -70,6 +70,15 @@
 
       /* Focus ring */
       --focus-ring: 0 0 0 3px rgba(88,166,255,0.35);
+
+      /* Layout widths — two content densities.
+         Narrow: reading/form panels (STT, TTS, IDP, Health, Docs) — a single
+         column of prose or a form is genuinely easier to read/scan capped at
+         this width. Wide: dashboard/grid panels (Home, Database) — tiles and
+         tables benefit from the extra horizontal space instead of floating
+         in a column. */
+      --width-narrow: 720px;
+      --width-wide: 1400px;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -220,10 +229,19 @@
     }
 
     .panel {
-      display: none; width: 100%; max-width: 720px;
+      display: none; width: 100%; max-width: var(--width-narrow);
       padding: var(--space-10) var(--space-6) 60px;
     }
     .panel.active { display: block; animation: fadeUp var(--duration-slow) var(--ease-out); }
+
+    /* Dashboard/grid panels (Home, Database) need room for tiles and wide
+       tables — a single narrow column would strand most of the viewport
+       as empty margin. Collapses back to the narrow width once the
+       viewport itself can't comfortably fit more than one column anyway. */
+    .panel--wide { max-width: var(--width-wide); }
+    @media (max-width: 900px) {
+      .panel--wide { max-width: var(--width-narrow); }
+    }
 
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(8px); }
@@ -809,6 +827,20 @@
       font-size: var(--text-xs); font-weight: var(--weight-semibold); flex-shrink: 0;
     }
 
+    /* Wide viewports (panel is at its full --width-wide): trade the 4-column
+       layout for 5 columns so tiles genuinely grow — more breathing room per
+       tile and a bigger featured tile — instead of the same tile sizes just
+       floating in extra margin. Row 1: featured(3) + wide(2). Row 2: featured
+       continues + the two small tiles (1 each). */
+    @media (min-width: 1201px) {
+      .bento-grid { grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(2, minmax(180px, auto)); gap: var(--space-5); }
+      .bento-tile { padding: var(--space-8); }
+      .bento-tile--featured { grid-column: span 3; grid-row: span 2; }
+      .bento-tile--featured .bento-icon { font-size: 2.6rem; }
+      .bento-tile--featured .bento-desc { max-width: 42ch; }
+      .bento-tile--wide { grid-column: span 2; grid-row: span 1; }
+      .bento-tile--small { grid-column: span 1; grid-row: span 1; }
+    }
     @media (max-width: 900px) {
       .bento-grid { grid-template-columns: repeat(2, 1fr); }
       .bento-tile--featured { grid-column: span 2; grid-row: span 1; }
@@ -871,7 +903,7 @@
 <main>
 
   <!-- ── Home Panel ── -->
-  <div class="panel active" id="panel-home">
+  <div class="panel active panel--wide" id="panel-home">
     <div class="panel-header">
       <h1>👋 Welcome to <span style="color:var(--accent)">Aperture</span> AI</h1>
       <p>One API for speech and document intelligence — transcribe audio, synthesize natural speech, and extract structured data from documents, powered by Deepgram and OpenAI.</p>
@@ -1077,7 +1109,7 @@
   </div>
 
   <!-- ── Database Panel ── -->
-  <div class="panel" id="panel-db">
+  <div class="panel panel--wide" id="panel-db">
     <div class="panel-header">
       <h1>🗄️ Database</h1>
       <p>Live view of all API requests tracked in PostgreSQL — every field required by the assessment.</p>
