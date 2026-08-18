@@ -8,26 +8,35 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      /* Color — neutral scale + single accent, semantic status colors */
-      --bg:         #0d1117;
-      --surface:    #161b22;
-      --surface2:   #21262d;
-      --surface3:   #2b3138;
-      --border:     #30363d;
-      --border-hover: #3d444d;
-      --accent:     #58a6ff;
-      --accent-hover: #79bbff;
-      --accent-soft: rgba(88,166,255,0.12);
-      --text:       #e6edf3;
-      --text2:      #8b949e;
-      --text3:      #6e7681;
+      /* ── Color ─────────────────────────────────────────────
+         Neutral scale is a true cool charcoal (not GitHub's blue-black)
+         paired with exactly one accent: a warm copper/amber — a direct
+         reference to the product name "Aperture" (a lens iris gathering
+         light). Semantic status colors (green/red/yellow) stay separate
+         from the accent so hierarchy communication never collides with
+         brand color. */
+      --bg:         #0b0b0d;
+      --surface:    #131316;
+      --surface2:   #1a1a1e;
+      --surface3:   #222226;
+      --border:     #27272c;
+      --border-hover: #38383f;
+      --accent:     #e2833f;
+      --accent-hover: #ef9a5c;
+      --accent-soft: rgba(226,131,63,0.12);
+      --text:       #f1f0ee;
+      --text2:      #8f8f96;
+      --text3:      #626268;
       --green:      #3fb950;
       --red:        #f85149;
       --yellow:     #d29922;
-      --code:       #79c0ff;
-      --on-accent:  #0d1117;
+      --code:       #eba165;
+      --on-accent:  #16110b;
 
-      /* Typography — max 2 families, capped size/weight scale */
+      /* Typography — max 2 families, capped UI size/weight scale.
+         --text-display sits outside the 5-size UI scale on purpose: it is
+         editorial hero type used exactly once (Home headline), the same
+         way a print title differs in kind from body copy, not just size. */
       --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       --font-mono: "JetBrains Mono", "Fira Code", "SFMono-Regular", Consolas, monospace;
       --text-xs:   0.72rem;
@@ -35,6 +44,7 @@
       --text-base: 0.9rem;
       --text-lg:   1.1rem;
       --text-xl:   1.5rem;
+      --text-display: clamp(2.4rem, 5vw, 3.75rem);
       /* Capped at 3 weights total: regular (body), medium (labels/nav), semibold (emphasis/headings) */
       --weight-regular: 400;
       --weight-medium:  500;
@@ -49,27 +59,28 @@
       --space-6: 24px;
       --space-8: 32px;
       --space-10: 40px;
+      --space-12: 48px;
 
       /* Radius */
       --radius-sm: 6px;
       --radius-md: 8px;
-      --radius-lg: 10px;
+      --radius-lg: 14px;
       --radius-full: 999px;
       --radius: var(--radius-lg);
 
       /* Elevation — subtle, used sparingly */
-      --shadow-sm: 0 1px 2px rgba(0,0,0,0.24);
-      --shadow-md: 0 8px 24px rgba(0,0,0,0.35);
-      --shadow-lg: 0 16px 40px rgba(0,0,0,0.45);
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.28);
+      --shadow-md: 0 8px 24px rgba(0,0,0,0.4);
+      --shadow-lg: 0 16px 40px rgba(0,0,0,0.5);
 
-      /* Motion */
+      /* Motion — capped at 200ms per design system */
       --ease-out: cubic-bezier(.4,0,.2,1);
       --duration-fast: 120ms;
       --duration-base: 180ms;
-      --duration-slow: 220ms;
+      --duration-slow: 200ms;
 
       /* Focus ring */
-      --focus-ring: 0 0 0 3px rgba(88,166,255,0.35);
+      --focus-ring: 0 0 0 3px rgba(226,131,63,0.35);
 
       /* Layout widths — two content densities.
          Narrow: reading/form panels (STT, TTS, IDP, Health, Docs) — a single
@@ -79,6 +90,7 @@
          in a column. */
       --width-narrow: 720px;
       --width-wide: 1400px;
+      --rail-width: 248px;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -108,13 +120,14 @@
       border-radius: var(--radius-sm);
     }
 
-    /* ── Header ─────────────────────────────────────── */
+    /* ── Header ─────────────────────────────────────────────
+       A thin top strip carries brand + status only. Primary navigation
+       lives in the rail (below), not here — the header's one job is
+       global identity + "is the product alive" context. */
     header {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      height: 60px;
-      background: rgba(22,27,34,0.85);
-      backdrop-filter: blur(10px) saturate(140%);
-      -webkit-backdrop-filter: blur(10px) saturate(140%);
+      height: 56px;
+      background: var(--bg);
       border-bottom: 1px solid var(--border);
       display: flex; align-items: center; padding: 0 var(--space-5); gap: var(--space-4);
     }
@@ -132,31 +145,41 @@
       background: var(--text); border-radius: var(--radius-full);
       transition: transform var(--duration-base) var(--ease-out), opacity var(--duration-base) var(--ease-out);
     }
+    /* Rail is always visible at desktop widths — the header trigger is a
+       mobile-only affordance, so it visually steps aside there. */
+    @media (min-width: 1024px) { .hamburger { display: none; } }
 
     .site-title {
       font-size: var(--text-lg); font-weight: var(--weight-semibold); color: var(--text);
-      letter-spacing: 0.3px;
+      letter-spacing: -0.01em;
     }
     .site-title span { color: var(--accent); }
 
     .header-badge {
       margin-left: auto;
+      font-family: var(--font-mono);
       font-size: var(--text-xs); color: var(--text2);
       background: var(--surface2); border: 1px solid var(--border);
       padding: 3px var(--space-3); border-radius: var(--radius-full);
     }
 
-    /* ── Sidebar overlay ─────────────────────────────── */
+    /* ── Sidebar overlay (mobile only — desktop rail has no scrim) ── */
     .overlay {
       display: none; position: fixed; inset: 0; z-index: 200;
-      background: rgba(0,0,0,0.55); backdrop-filter: blur(2px);
+      background: rgba(0,0,0,0.6);
       opacity: 0; transition: opacity var(--duration-slow) var(--ease-out);
     }
     .overlay.open { display: block; opacity: 1; }
+    @media (min-width: 1024px) { .overlay { display: none !important; } }
 
+    /* ── Sidebar / rail ─────────────────────────────────────
+       "Fixed sidebar" pattern: a permanent left rail on desktop
+       (content shifts right to make real room for it, rather than
+       floating an overlay over everything), collapsing to a slide-in
+       drawer only once the viewport can't spare 248px. */
     .sidebar {
       position: fixed; top: 0; left: -300px; bottom: 0; z-index: 201;
-      width: 270px;
+      width: var(--rail-width);
       background: var(--surface);
       border-right: 1px solid var(--border);
       box-shadow: var(--shadow-lg);
@@ -164,9 +187,12 @@
       display: flex; flex-direction: column;
     }
     .sidebar.open { left: 0; }
+    @media (min-width: 1024px) {
+      .sidebar { left: 0; box-shadow: none; transition: none; }
+    }
 
     .sidebar-header {
-      height: 60px; display: flex; align-items: center;
+      height: 56px; display: flex; align-items: center;
       padding: 0 var(--space-5); gap: var(--space-3);
       border-bottom: 1px solid var(--border);
     }
@@ -177,6 +203,7 @@
       transition: color var(--duration-fast) var(--ease-out), background var(--duration-fast) var(--ease-out);
     }
     .sidebar-header .close-btn:hover { color: var(--text); background: var(--surface2); }
+    @media (min-width: 1024px) { .sidebar-header .close-btn { display: none; } }
 
     .sidebar-logo {
       font-size: var(--text-base); font-weight: var(--weight-semibold); color: var(--text);
@@ -208,24 +235,32 @@
       width: 3px; height: 18px; border-radius: var(--radius-full); background: var(--accent);
     }
 
+    /* Icon chip — rounded-square token background behind each glyph,
+       consistent size regardless of the emoji's natural metrics. */
     nav a .icon {
-      width: 32px; height: 32px; border-radius: var(--radius-md);
+      width: 30px; height: 30px; border-radius: var(--radius-sm);
       display: flex; align-items: center; justify-content: center;
-      font-size: 1rem; flex-shrink: 0;
+      font-size: 0.95rem; flex-shrink: 0;
       background: var(--surface2);
       transition: background var(--duration-fast) var(--ease-out);
     }
-    nav a.active .icon { background: rgba(88,166,255,0.18); }
+    nav a.active .icon { background: var(--accent-soft); }
 
     .sidebar-footer {
       padding: var(--space-4); border-top: 1px solid var(--border);
       font-size: var(--text-xs); color: var(--text2); text-align: center;
     }
 
-    /* ── Main content ────────────────────────────────── */
+    /* ── Main content ─────────────────────────────────
+       On desktop the rail is permanent, so main is pushed right by its
+       exact width rather than sitting under a floating overlay. */
     main {
-      padding-top: 60px; min-height: 100vh;
+      padding-top: 56px; min-height: 100vh;
       display: flex; flex-direction: column; align-items: center;
+    }
+    @media (min-width: 1024px) {
+      header { padding-left: calc(var(--rail-width) + var(--space-5)); }
+      main { margin-left: var(--rail-width); }
     }
 
     .panel {
@@ -265,6 +300,17 @@
     }
     .panel-header p { color: var(--text2); font-size: var(--text-base); line-height: 1.6; }
 
+    /* Section index — small mono counter used once per panel header,
+       echoing the numbered-section convention (001 / 002 / 003) common
+       to editorial studio sites. Purely a wayfinding cue, not decoration. */
+    .panel-eyebrow {
+      display: flex; align-items: center; gap: var(--space-2);
+      font-family: var(--font-mono); font-size: var(--text-xs); color: var(--accent);
+      letter-spacing: 0.08em; text-transform: uppercase;
+      margin-bottom: var(--space-3);
+    }
+    .panel-eyebrow::before { content: ''; width: 14px; height: 1px; background: var(--accent); }
+
     /* ── Card ────────────────────────────────────────── */
     .card {
       background: var(--surface);
@@ -274,6 +320,7 @@
       margin-bottom: var(--space-4);
       transition: border-color var(--duration-base) var(--ease-out);
     }
+    .card:hover { border-color: var(--border-hover); }
 
     .card-title {
       font-size: var(--text-xs); font-weight: var(--weight-semibold);
@@ -304,6 +351,35 @@
 
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
     @media (max-width: 520px) { .form-row { grid-template-columns: 1fr; } }
+
+    /* ── Language detection banner (TTS) ───────────────────
+       Three states reuse existing tokens only: detecting = neutral
+       surface, detected = accent (positive match), unsupported =
+       yellow (a warning, not an error — no red). */
+    .lang-banner {
+      display: flex; align-items: center; gap: var(--space-2);
+      padding: 10px var(--space-4);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      color: var(--text2);
+      font-size: var(--text-sm);
+      margin-bottom: var(--space-4);
+      transition: background var(--duration-base) var(--ease-out),
+                  border-color var(--duration-base) var(--ease-out),
+                  color var(--duration-base) var(--ease-out);
+    }
+    .lang-banner .lang-flag { font-size: 1rem; line-height: 1; flex-shrink: 0; }
+    .lang-banner.detected {
+      background: var(--accent-soft);
+      border-color: rgba(226,131,63,0.35);
+      color: var(--accent);
+    }
+    .lang-banner.unsupported {
+      background: rgba(210,153,34,0.1);
+      border-color: rgba(210,153,34,0.35);
+      color: var(--yellow);
+    }
 
     /* ── Upload zone ─────────────────────────────────── */
     .upload-zone {
@@ -389,8 +465,8 @@
 
     /* ── Annotated table ──────────────────────────────── */
     .fields-table tr { cursor: pointer; transition: background 0.15s; }
-    .fields-table tr:hover td { background: rgba(88,166,255,0.07); }
-    .fields-table tr.ann-highlight td { background: rgba(88,166,255,0.15); }
+    .fields-table tr:hover td { background: rgba(226,131,63,0.07); }
+    .fields-table tr.ann-highlight td { background: rgba(226,131,63,0.15); }
     .color-dot {
       display: inline-block; width: 10px; height: 10px;
       border-radius: 50%; margin-right: 8px; vertical-align: middle; flex-shrink: 0;
@@ -464,7 +540,7 @@
       padding: 4px 12px; border-radius: var(--radius-full);
       font-size: var(--text-xs); font-weight: var(--weight-semibold);
     }
-    .badge-blue { background: rgba(88,166,255,0.15); color: var(--accent); }
+    .badge-blue { background: rgba(226,131,63,0.15); color: var(--accent); }
     .badge-green { background: rgba(63,185,80,0.15); color: var(--green); }
     .badge-yellow { background: rgba(210,153,34,0.15); color: var(--yellow); }
     .badge-red { background: rgba(248,81,73,0.15); color: var(--red); }
@@ -529,7 +605,7 @@
       padding: 20px; background: var(--surface2);
       border-radius: var(--radius-md);
     }
-    .health-status { font-size: 1.1rem; font-weight: var(--weight-semibold); }
+    .health-status { font-family: var(--font-mono); font-size: 1.1rem; font-weight: var(--weight-semibold); }
     .health-version { font-size: 0.82rem; color: var(--text2); margin-top: 4px; }
 
     /* error box */
@@ -560,7 +636,7 @@
       max-width: 220px;
     }
     .logs-table tr:last-child td { border-bottom: none; }
-    .logs-table tr:hover td { background: rgba(88,166,255,0.05); transition: background var(--duration-fast) var(--ease-out); }
+    .logs-table tr:hover td { background: rgba(226,131,63,0.05); transition: background var(--duration-fast) var(--ease-out); }
     .logs-table .mono { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text2); }
     .status-pill {
       display: inline-block; padding: 2px 8px; border-radius: 4px;
@@ -572,7 +648,7 @@
     .endpoint-tag {
       display: inline-block; padding: 2px 8px; border-radius: 4px;
       font-size: 0.72rem; font-weight: var(--weight-semibold); white-space: nowrap;
-      background: rgba(88,166,255,0.12); color: var(--accent);
+      background: rgba(226,131,63,0.12); color: var(--accent);
     }
     .db-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: var(--space-3); margin-bottom: var(--space-5); }
     .db-stat-card {
@@ -582,7 +658,7 @@
     }
     .db-stat-card:hover { border-color: var(--border-hover); }
     .db-stat-label { font-size: 0.72rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
-    .db-stat-value { font-size: 1.4rem; font-weight: var(--weight-semibold); color: var(--text); }
+    .db-stat-value { font-family: var(--font-mono); font-size: 1.5rem; font-weight: var(--weight-semibold); color: var(--text); }
     .db-stat-sub { font-size: 0.72rem; color: var(--text2); margin-top: 2px; }
 
     /* ── Documentation panel ─────────────────────────── */
@@ -603,7 +679,7 @@
       border-radius: 5px; letter-spacing: 0.05em;
     }
     .doc-method.post { background: rgba(63,185,80,0.2); color: var(--green); }
-    .doc-method.get  { background: rgba(88,166,255,0.2); color: var(--accent); }
+    .doc-method.get  { background: rgba(226,131,63,0.2); color: var(--accent); }
     .doc-path { font-family: var(--font-mono); font-size: 0.95rem; color: var(--text); font-weight: var(--weight-semibold); }
     .doc-endpoint-title { font-size: 0.82rem; color: var(--text2); margin-left: auto; }
 
@@ -642,7 +718,7 @@
 
     .doc-note {
       display: flex; gap: 10px; align-items: flex-start;
-      background: rgba(88,166,255,0.08); border: 1px solid rgba(88,166,255,0.25);
+      background: rgba(226,131,63,0.08); border: 1px solid rgba(226,131,63,0.25);
       border-radius: var(--radius-md); padding: 12px 14px; margin-top: 14px;
       font-size: 0.83rem; color: var(--text2); line-height: 1.5;
     }
@@ -707,7 +783,7 @@
     }
     .doc-step-num {
       flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%;
-      background: var(--accent); color: #0d1117;
+      background: var(--accent); color: var(--on-accent);
       font-size: 0.75rem; font-weight: var(--weight-semibold);
       display: flex; align-items: center; justify-content: center;
     }
@@ -780,86 +856,208 @@
     }
     .api-key-toggle:hover { opacity: 1; background: var(--surface3); }
 
-    /* ── Home panel ───────────────────────────────────── */
-    /* Bento grid — asymmetric tiles, not a uniform row.
-       Desktop: 4 columns × 2 rows. STT is featured (2×2), TTS is wide (2×1),
-       IDP and the info tile fill the remaining two 1×1 cells. */
-    .bento-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      grid-template-rows: repeat(2, minmax(140px, auto));
-      gap: var(--space-4);
-      margin-top: var(--space-2);
+    /* ── Home panel ───────────────────────────────────────
+       Layout paradigm: editorial hero + directory list (a "Ribbon"
+       row pattern), deliberately not a card/bento grid — with only
+       three services and a handful of system links, uniform boxy
+       tiles waste width and flatten priority. A full-bleed row list
+       reads like an API route index (Stripe docs, Linear command
+       palette): scannable, ordered, and it actually uses the wide
+       viewport instead of leaving it as margin. */
+
+    .home-hero {
+      position: relative;
+      padding-bottom: var(--space-8);
+      margin-bottom: var(--space-8);
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+    }
+    /* Aperture-iris glow — concentric rings referencing a camera iris
+       opening around the headline. One radial gradient, accent-only,
+       purely atmospheric — never competes with text contrast. */
+    .home-hero::before {
+      content: '';
+      position: absolute; top: -140px; right: -120px;
+      width: 420px; height: 420px; pointer-events: none;
+      background:
+        radial-gradient(circle at center, transparent 0 58%, rgba(226,131,63,0.16) 59% 61%, transparent 62% 100%),
+        radial-gradient(circle at center, transparent 0 72%, rgba(226,131,63,0.09) 73% 75%, transparent 76% 100%),
+        radial-gradient(circle at center, rgba(226,131,63,0.14), transparent 70%);
+    }
+    @media (max-width: 900px) { .home-hero::before { display: none; } }
+
+    .home-hero-eyebrow {
+      position: relative;
+      display: inline-flex; align-items: center; gap: var(--space-2);
+      font-family: var(--font-mono); font-size: var(--text-xs); color: var(--text2);
+      background: var(--surface2); border: 1px solid var(--border);
+      padding: 5px 12px; border-radius: var(--radius-full);
+      margin-bottom: var(--space-5);
+    }
+    .home-hero-eyebrow .status-dot { width: 6px; height: 6px; }
+
+    .home-hero h1 {
+      position: relative;
+      font-size: var(--text-display); font-weight: var(--weight-semibold);
+      letter-spacing: -0.02em; line-height: 1.08;
+      max-width: 16ch; margin-bottom: var(--space-5);
+    }
+    .home-hero h1 span { color: var(--accent); }
+
+    .home-hero p {
+      position: relative;
+      color: var(--text2); font-size: var(--text-lg); line-height: 1.6;
+      max-width: 56ch;
     }
 
-    .bento-tile {
-      display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-2);
-      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-      padding: var(--space-6); text-align: left; width: 100%; height: 100%;
-      font-size: var(--text-base); color: var(--text);
-      transition: border-color var(--duration-base) var(--ease-out), transform var(--duration-base) var(--ease-out);
+    /* Credential strip — three quick facts, borrowed from the studio-site
+       convention of surfacing proof points directly under the headline
+       instead of burying them in body copy. */
+    .home-stats {
+      position: relative;
+      display: flex; flex-wrap: wrap; gap: var(--space-8);
+      margin-top: var(--space-8);
     }
-    button.bento-tile { cursor: pointer; }
-    button.bento-tile:hover { border-color: var(--accent); transform: translateY(-2px); }
-    button.bento-tile:focus-visible { outline: none; box-shadow: var(--focus-ring); }
-
-    .bento-tile--featured {
-      grid-column: span 2; grid-row: span 2;
-      justify-content: center;
-      background: linear-gradient(180deg, var(--surface) 0%, var(--surface2) 100%);
+    .home-stat-value {
+      font-family: var(--font-mono); font-size: var(--text-xl); font-weight: var(--weight-semibold);
+      color: var(--text);
     }
-    .bento-tile--featured .bento-icon { font-size: 2.2rem; }
-    .bento-tile--featured .bento-title { font-size: var(--text-xl); }
-    .bento-tile--featured .bento-desc { font-size: var(--text-base); max-width: 34ch; }
-
-    .bento-tile--wide { grid-column: span 2; grid-row: span 1; }
-    .bento-tile--small { grid-column: span 1; grid-row: span 1; }
-
-    .bento-icon { font-size: 1.6rem; }
-    .bento-title { font-size: var(--text-base); font-weight: var(--weight-semibold); color: var(--text); }
-    .bento-desc { font-size: var(--text-sm); color: var(--text2); line-height: 1.5; }
-    .bento-arrow {
-      margin-top: auto; padding-top: var(--space-2);
-      font-size: var(--text-sm); color: var(--accent); font-weight: var(--weight-medium);
+    .home-stat-label {
+      font-size: var(--text-xs); color: var(--text2); margin-top: 2px;
     }
 
-    /* Info tile — decorative content, not interactive */
-    .bento-tile--info { justify-content: center; }
-    .bento-info-steps { display: flex; flex-direction: column; gap: var(--space-2); width: 100%; }
-    .bento-info-step {
+    .directory-label {
+      font-size: 0.7rem; font-weight: var(--weight-semibold); letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--text3);
+      margin-bottom: var(--space-3);
+    }
+
+    .directory-list { display: flex; flex-direction: column; }
+
+    .directory-row {
+      display: flex; align-items: center; gap: var(--space-5);
+      width: 100%; text-align: left;
+      background: none; border: none; border-top: 1px solid var(--border);
+      color: var(--text); font-family: inherit; cursor: pointer;
+      padding: var(--space-5) var(--space-2);
+      transition: background var(--duration-fast) var(--ease-out), padding-left var(--duration-base) var(--ease-out);
+    }
+    .directory-list > :last-child { border-bottom: 1px solid var(--border); }
+    .directory-row:hover, .directory-row:focus-visible {
+      background: var(--surface); padding-left: var(--space-4);
+    }
+    .directory-row:focus-visible { outline: none; box-shadow: inset var(--focus-ring); }
+
+    .directory-index {
+      font-family: var(--font-mono); font-size: var(--text-sm); color: var(--text3);
+      width: 2ch; flex-shrink: 0;
+    }
+    .directory-icon {
+      width: 44px; height: 44px; border-radius: var(--radius-md);
+      background: var(--surface2); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; flex-shrink: 0;
+      transition: background var(--duration-base) var(--ease-out), border-color var(--duration-base) var(--ease-out);
+    }
+    .directory-row:hover .directory-icon { background: var(--accent-soft); border-color: rgba(226,131,63,0.35); }
+
+    .directory-body { flex: 1; min-width: 0; }
+    .directory-title {
+      font-size: var(--text-lg); font-weight: var(--weight-semibold);
       display: flex; align-items: center; gap: var(--space-2);
-      font-size: var(--text-xs); color: var(--text2);
     }
-    .bento-info-step-num {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 18px; height: 18px; border-radius: var(--radius-full);
+    .directory-desc {
+      font-size: var(--text-sm); color: var(--text2); line-height: 1.5;
+      margin-top: 2px; max-width: 62ch;
+    }
+    .directory-meta {
+      font-family: var(--font-mono); font-size: var(--text-xs); color: var(--text3);
+      flex-shrink: 0; display: none;
+    }
+    @media (min-width: 640px) { .directory-meta { display: block; } }
+
+    .directory-arrow {
+      font-size: 1.1rem; color: var(--text3); flex-shrink: 0;
+      transition: transform var(--duration-base) var(--ease-out), color var(--duration-base) var(--ease-out);
+    }
+    .directory-row:hover .directory-arrow { color: var(--accent); transform: translateX(3px); }
+
+    /* System links render as a tighter secondary list beneath the
+       primary services — same row grammar, smaller icon, no arrow
+       animation emphasis, so priority stays visually honest. */
+    .directory-row--compact { padding: var(--space-4) var(--space-2); }
+    .directory-row--compact .directory-icon { width: 36px; height: 36px; font-size: 1rem; }
+    .directory-row--compact .directory-title { font-size: var(--text-base); }
+
+    .home-section { margin-top: var(--space-10); }
+
+    /* ── Shared panel head ─────────────────────────────────
+       Icon chip (same 44–52px rounded-square token as the Home
+       directory rows) beside eyebrow/title/description. Replaces the
+       bare "emoji + <h1>" pattern every non-Home panel used before,
+       so every panel opens with the same visual grammar as Home. */
+    .panel-head { display: flex; gap: var(--space-4); align-items: flex-start; margin-bottom: var(--space-2); }
+    .panel-head-icon {
+      width: 52px; height: 52px; border-radius: var(--radius-md);
+      background: var(--surface2); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; flex-shrink: 0;
+    }
+    .panel-head-body { flex: 1; min-width: 0; padding-top: 2px; }
+    .panel-head h1 { font-size: var(--text-xl); font-weight: var(--weight-semibold); margin-bottom: 6px; letter-spacing: -0.01em; }
+    .panel-head p { color: var(--text2); font-size: var(--text-base); line-height: 1.6; max-width: 62ch; }
+
+    /* ── Workbench ──────────────────────────────────────────
+       Two-pane input/output split for form-heavy panels (STT, TTS,
+       IDP) — a fixed-width input rail beside a flexible results pane,
+       the same left-controls/right-canvas grammar as the finance
+       dashboard references, instead of stacking input above output
+       in one narrow scrolling column. Collapses to a single column
+       once the viewport can't hold two panes comfortably. */
+    .workbench { display: grid; grid-template-columns: minmax(300px,380px) 1fr; gap: var(--space-6); align-items: start; }
+    @media (max-width: 900px) { .workbench { grid-template-columns: 1fr; } }
+    .workbench .results { margin-top: 0; }
+    .workbench-empty {
+      border: 1px dashed var(--border); border-radius: var(--radius);
+      padding: var(--space-10) var(--space-6); text-align: center;
+      color: var(--text3); font-size: var(--text-sm); line-height: 1.6;
+    }
+    .workbench-empty-icon { font-size: 1.8rem; margin-bottom: var(--space-3); opacity: 0.6; }
+    /* Empty state hides itself once its paired .results block becomes
+       visible — pure CSS, no extra JS needed since .results already
+       toggles the "visible" class on every successful/error render. */
+    .results.visible ~ .workbench-empty { display: none; }
+
+    /* Small icon token dropped in front of a stat value — the same
+       finance-dashboard row grammar (icon chip + label + tabular
+       number) reused for db-stat cards and the health readout. */
+    .stat-icon {
+      width: 32px; height: 32px; border-radius: var(--radius-sm);
       background: var(--accent-soft); color: var(--accent);
-      font-size: var(--text-xs); font-weight: var(--weight-semibold); flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.95rem; margin-bottom: var(--space-2);
     }
 
-    /* Wide viewports (panel is at its full --width-wide): trade the 4-column
-       layout for 5 columns so tiles genuinely grow — more breathing room per
-       tile and a bigger featured tile — instead of the same tile sizes just
-       floating in extra margin. Row 1: featured(3) + wide(2). Row 2: featured
-       continues + the two small tiles (1 each). */
-    @media (min-width: 1201px) {
-      .bento-grid { grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(2, minmax(180px, auto)); gap: var(--space-5); }
-      .bento-tile { padding: var(--space-8); }
-      .bento-tile--featured { grid-column: span 3; grid-row: span 2; }
-      .bento-tile--featured .bento-icon { font-size: 2.6rem; }
-      .bento-tile--featured .bento-desc { max-width: 42ch; }
-      .bento-tile--wide { grid-column: span 2; grid-row: span 1; }
-      .bento-tile--small { grid-column: span 1; grid-row: span 1; }
+    /* ── Doc section eyebrow ────────────────────────────────
+       Numbered chip reused from the panel-eyebrow convention, applied
+       per-section since Documentation is one long scroll of many
+       sections rather than one panel needing one index number. */
+    .doc-section-head { display: flex; align-items: center; gap: var(--space-3); margin-bottom: 14px; }
+    .doc-section-num {
+      font-family: var(--font-mono); font-size: var(--text-xs); color: var(--accent);
+      background: var(--accent-soft); border: 1px solid rgba(226,131,63,0.3);
+      border-radius: var(--radius-full); width: 26px; height: 26px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
     }
-    @media (max-width: 900px) {
-      .bento-grid { grid-template-columns: repeat(2, 1fr); }
-      .bento-tile--featured { grid-column: span 2; grid-row: span 1; }
-      .bento-tile--wide { grid-column: span 2; }
-    }
-    @media (max-width: 640px) {
-      .bento-grid { grid-template-columns: 1fr; }
-      .bento-tile--featured, .bento-tile--wide, .bento-tile--small { grid-column: span 1; grid-row: auto; }
-    }
+    .doc-section-head .card-title { margin-bottom: 0; }
+
+    /* ── Health readout ─────────────────────────────────────
+       Enlarged tabular-numeral status treatment — same visual weight
+       as a db-stat-value — so the health check reads as a real status
+       readout rather than a small icon-and-caption row. */
+    .health-display { padding: var(--space-6) var(--space-5); gap: var(--space-5); }
+    .health-status { font-size: 1.4rem; }
+    .health-version { font-family: var(--font-mono); }
   </style>
 </head>
 <body>
@@ -917,208 +1115,309 @@
 
   <!-- ── Home Panel ── -->
   <div class="panel active panel--wide" id="panel-home">
-    <div class="panel-header">
-      <h1>👋 Welcome to <span style="color:var(--accent)">Aperture</span> AI</h1>
-      <p>One API for speech and document intelligence — transcribe audio, synthesize natural speech, and extract structured data from documents, powered by Deepgram and OpenAI.</p>
+
+    <div class="home-hero">
+      <div class="home-hero-eyebrow"><span class="status-dot green"></span> AI Services API · live demo</div>
+      <h1>Speech and document intelligence, <span>one API.</span></h1>
+      <p>Transcribe audio, synthesize natural speech, and extract structured data from documents — powered by Deepgram and Azure OpenAI, logged end-to-end in Postgres.</p>
+      <div class="home-stats">
+        <div><div class="home-stat-value">3</div><div class="home-stat-label">open endpoints</div></div>
+        <div><div class="home-stat-value">80+</div><div class="home-stat-label">AI voices, 7 languages</div></div>
+        <div><div class="home-stat-value">2</div><div class="home-stat-label">model providers</div></div>
+      </div>
     </div>
 
-    <div class="bento-grid">
-      <button class="bento-tile bento-tile--featured" onclick="showPanel('stt')">
-        <span class="bento-icon">🎙️</span>
-        <span class="bento-title">Speech-to-Text</span>
-        <span class="bento-desc">Transcribe audio with speaker diarization and automatic language detection, powered by Deepgram Nova-2.</span>
-        <span class="bento-arrow">Open →</span>
+    <div class="directory-label">Services</div>
+    <div class="directory-list">
+      <button class="directory-row" onclick="showPanel('stt')">
+        <span class="directory-index">01</span>
+        <span class="directory-icon">🎙️</span>
+        <span class="directory-body">
+          <span class="directory-title">Speech-to-Text</span>
+          <span class="directory-desc">Transcribe audio with speaker diarization and automatic language detection, powered by Deepgram Nova-2.</span>
+        </span>
+        <span class="directory-meta">POST /stt</span>
+        <span class="directory-arrow">→</span>
       </button>
-      <button class="bento-tile bento-tile--wide" onclick="showPanel('tts')">
-        <span class="bento-icon">🔊</span>
-        <span class="bento-title">Text-to-Speech</span>
-        <span class="bento-desc">Turn written text into natural-sounding speech across 80+ AI voices.</span>
-        <span class="bento-arrow">Open →</span>
+      <button class="directory-row" onclick="showPanel('tts')">
+        <span class="directory-index">02</span>
+        <span class="directory-icon">🔊</span>
+        <span class="directory-body">
+          <span class="directory-title">Text-to-Speech</span>
+          <span class="directory-desc">Turn written text into natural-sounding speech across 80+ AI voices.</span>
+        </span>
+        <span class="directory-meta">POST /tts</span>
+        <span class="directory-arrow">→</span>
       </button>
-      <button class="bento-tile bento-tile--small" onclick="showPanel('idp')">
-        <span class="bento-icon">📄</span>
-        <span class="bento-title">Document Analysis</span>
-        <span class="bento-desc">Extract structured fields from IDs, passports, invoices and receipts.</span>
-        <span class="bento-arrow">Open →</span>
+      <button class="directory-row" onclick="showPanel('idp')">
+        <span class="directory-index">03</span>
+        <span class="directory-icon">📄</span>
+        <span class="directory-body">
+          <span class="directory-title">Document Analysis</span>
+          <span class="directory-desc">Extract structured fields from IDs, passports, invoices and receipts, with bounding-box annotations.</span>
+        </span>
+        <span class="directory-meta">POST /idp/analyze</span>
+        <span class="directory-arrow">→</span>
       </button>
-      <div class="bento-tile bento-tile--small bento-tile--info">
-        <span class="bento-title">How it works</span>
-        <div class="bento-info-steps">
-          <div class="bento-info-step"><span class="bento-info-step-num">1</span> Upload a file</div>
-          <div class="bento-info-step"><span class="bento-info-step-num">2</span> AI processes it</div>
-          <div class="bento-info-step"><span class="bento-info-step-num">3</span> Get results instantly</div>
-        </div>
+    </div>
+
+    <div class="home-section">
+      <div class="directory-label">System</div>
+      <div class="directory-list">
+        <button class="directory-row directory-row--compact" onclick="showPanel('health')">
+          <span class="directory-index">04</span>
+          <span class="directory-icon">💚</span>
+          <span class="directory-body">
+            <span class="directory-title">Health Check</span>
+            <span class="directory-desc">Verify the API service is running and reachable.</span>
+          </span>
+          <span class="directory-meta">GET /health</span>
+          <span class="directory-arrow">→</span>
+        </button>
+        <button class="directory-row directory-row--compact" onclick="showPanel('db')">
+          <span class="directory-index">05</span>
+          <span class="directory-icon">🗄️</span>
+          <span class="directory-body">
+            <span class="directory-title">Database</span>
+            <span class="directory-desc">Live view of every request tracked in PostgreSQL.</span>
+          </span>
+          <span class="directory-meta">GET /logs 🔒</span>
+          <span class="directory-arrow">→</span>
+        </button>
+        <button class="directory-row directory-row--compact" onclick="showPanel('docs')">
+          <span class="directory-index">06</span>
+          <span class="directory-icon">📖</span>
+          <span class="directory-body">
+            <span class="directory-title">Documentation</span>
+            <span class="directory-desc">A complete guide to every endpoint, from first request to full reference.</span>
+          </span>
+          <span class="directory-arrow">→</span>
+        </button>
+        <button class="directory-row directory-row--compact" onclick="showPanel('architecture')">
+          <span class="directory-index">07</span>
+          <span class="directory-icon">🧩</span>
+          <span class="directory-body">
+            <span class="directory-title">Architecture</span>
+            <span class="directory-desc">How the browser, FastAPI, external providers, and Postgres fit together.</span>
+          </span>
+          <span class="directory-arrow">→</span>
+        </button>
       </div>
     </div>
   </div>
 
   <!-- ── STT Panel ── -->
-  <div class="panel" id="panel-stt">
+  <div class="panel panel--wide" id="panel-stt">
     <div class="panel-header">
       <a class="back-home-btn" onclick="showPanel('home')">← Home</a>
-      <h1>🎙️ Speech-to-Text</h1>
-      <p>Upload an MP3 or WAV audio file. Deepgram Nova-2 will transcribe it with speaker diarization and language detection.</p>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Audio File</div>
-      <div class="upload-zone" id="stt-zone">
-        <input type="file" id="stt-file" accept=".mp3,.wav,audio/mpeg,audio/wav" onchange="onSTTFile(this)" />
-        <div class="upload-icon">🎵</div>
-        <p>Drag & drop or click to upload</p>
-        <p style="font-size:0.78rem;margin-top:4px;color:var(--text2)">MP3 or WAV · max 25 MB</p>
-        <div class="file-name" id="stt-fname"></div>
-      </div>
-
-      <div class="btn-row">
-        <button class="btn btn-primary" id="stt-btn" onclick="runSTT()" disabled>
-          Transcribe Audio
-        </button>
+      <div class="panel-eyebrow">01 · POST /stt</div>
+      <div class="panel-head">
+        <div class="panel-head-icon">🎙️</div>
+        <div class="panel-head-body">
+          <h1>Speech-to-Text</h1>
+          <p>Upload an MP3 or WAV audio file. Deepgram Nova-2 will transcribe it with speaker diarization and language detection.</p>
+        </div>
       </div>
     </div>
 
-    <div class="results" id="stt-results">
-      <div class="result-card" id="stt-error-card" style="display:none">
-        <div class="result-card-header">⚠️ Error</div>
-        <div class="result-card-body"><div class="error-box" id="stt-error-msg"></div></div>
-      </div>
+    <div class="workbench">
+      <div class="card">
+        <div class="card-title">Audio File</div>
+        <div class="upload-zone" id="stt-zone">
+          <input type="file" id="stt-file" accept=".mp3,.wav,audio/mpeg,audio/wav" onchange="onSTTFile(this)" />
+          <div class="upload-icon">🎵</div>
+          <p>Drag & drop or click to upload</p>
+          <p style="font-size:0.78rem;margin-top:4px;color:var(--text2)">MP3 or WAV · max 25 MB</p>
+          <div class="file-name" id="stt-fname"></div>
+        </div>
 
-      <div class="result-card" id="stt-main-card">
-        <div class="result-card-header">📊 Analysis Results</div>
-        <div class="result-card-body">
-          <div id="stt-badges"></div>
-          <div class="card-title" style="margin-bottom:8px">📝 Full Transcript</div>
-          <div class="transcript-text" id="stt-transcript"></div>
+        <div class="btn-row">
+          <button class="btn btn-primary" id="stt-btn" onclick="runSTT()" disabled style="width:100%">
+            Transcribe Audio
+          </button>
         </div>
       </div>
 
-      <div class="result-card" id="stt-speakers-card" style="display:none">
-        <div class="result-card-header">👥 Speaker Segments</div>
-        <div class="result-card-body">
-          <div class="speakers" id="stt-speakers"></div>
-        </div>
-      </div>
+      <div>
+        <div class="results" id="stt-results">
+          <div class="result-card" id="stt-error-card" style="display:none">
+            <div class="result-card-header">⚠️ Error</div>
+            <div class="result-card-body"><div class="error-box" id="stt-error-msg"></div></div>
+          </div>
 
-      <div class="result-card">
-        <div class="result-card-header" style="justify-content:space-between">
-          <span>{ } Raw JSON</span>
-          <button class="json-toggle" onclick="toggleJson('stt-json', this)">Show JSON ▾</button>
+          <div class="result-card" id="stt-main-card">
+            <div class="result-card-header">📊 Analysis Results</div>
+            <div class="result-card-body">
+              <div id="stt-badges"></div>
+              <div class="card-title" style="margin-bottom:8px">📝 Full Transcript</div>
+              <div class="transcript-text" id="stt-transcript"></div>
+            </div>
+          </div>
+
+          <div class="result-card" id="stt-speakers-card" style="display:none">
+            <div class="result-card-header">👥 Speaker Segments</div>
+            <div class="result-card-body">
+              <div class="speakers" id="stt-speakers"></div>
+            </div>
+          </div>
+
+          <div class="result-card">
+            <div class="result-card-header" style="justify-content:space-between">
+              <span>{ } Raw JSON</span>
+              <button class="json-toggle" onclick="toggleJson('stt-json', this)">Show JSON ▾</button>
+            </div>
+            <div class="result-card-body" style="padding-top:8px">
+              <pre class="json-block" id="stt-json"></pre>
+            </div>
+          </div>
         </div>
-        <div class="result-card-body" style="padding-top:8px">
-          <pre class="json-block" id="stt-json"></pre>
+
+        <div class="workbench-empty" id="stt-empty">
+          <div class="workbench-empty-icon">📝</div>
+          Results appear here once you transcribe an audio file.
         </div>
       </div>
     </div>
   </div>
 
   <!-- ── TTS Panel ── -->
-  <div class="panel" id="panel-tts">
+  <div class="panel panel--wide" id="panel-tts">
     <div class="panel-header">
       <a class="back-home-btn" onclick="showPanel('home')">← Home</a>
-      <h1>🔊 Text-to-Speech</h1>
-      <p>Type your text below and choose a voice. Deepgram Aura will synthesize it into an MP3 you can play and download.</p>
+      <div class="panel-eyebrow">02 · POST /tts</div>
+      <div class="panel-head">
+        <div class="panel-head-icon">🔊</div>
+        <div class="panel-head-body">
+          <h1>Text-to-Speech</h1>
+          <p>Type your text below and choose a voice. Deepgram Aura will synthesize it into an MP3 you can play and download.</p>
+        </div>
+      </div>
     </div>
 
-    <div class="card">
-      <div class="card-title">Input</div>
-      <div style="margin-bottom:16px">
-        <label for="tts-text">Text to synthesize</label>
-        <textarea id="tts-text" placeholder="Type or paste your text here…" rows="5"></textarea>
-        <div style="text-align:right;font-size:0.75rem;color:var(--text2);margin-top:4px">
-          <span id="tts-char-count">0</span> / 2000 characters
+    <div class="workbench">
+      <div class="card">
+        <div class="card-title">Input</div>
+        <div style="margin-bottom:16px">
+          <label for="tts-text">Text to synthesize</label>
+          <textarea id="tts-text" placeholder="Type or paste your text here…" rows="6"></textarea>
+          <div style="text-align:right;font-size:0.75rem;color:var(--text2);margin-top:4px">
+            <span id="tts-char-count">0</span> / 2000 characters
+          </div>
+        </div>
+
+        <!-- Language detection banner -->
+        <div class="lang-banner detecting" id="lang-banner" style="display:none">
+          <span class="lang-flag" id="lang-flag"></span>
+          <span id="lang-banner-text"></span>
+        </div>
+
+        <div id="voice-section">
+          <label for="tts-voice">Voice</label>
+          <select id="tts-voice"></select>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-primary" id="tts-btn" onclick="runTTS()" style="width:100%">
+            Synthesize Speech
+          </button>
         </div>
       </div>
 
-      <!-- Language detection banner -->
-      <div class="lang-banner detecting" id="lang-banner" style="display:none">
-        <span class="lang-flag" id="lang-flag"></span>
-        <span id="lang-banner-text"></span>
-      </div>
+      <div>
+        <div class="results" id="tts-results">
+          <div class="result-card" id="tts-error-card" style="display:none">
+            <div class="result-card-header">⚠️ Error</div>
+            <div class="result-card-body"><div class="error-box" id="tts-error-msg"></div></div>
+          </div>
 
-      <div id="voice-section">
-        <label for="tts-voice">Voice</label>
-        <select id="tts-voice"></select>
-      </div>
-
-      <div class="btn-row">
-        <button class="btn btn-primary" id="tts-btn" onclick="runTTS()">
-          Synthesize Speech
-        </button>
-      </div>
-    </div>
-
-    <div class="results" id="tts-results">
-      <div class="result-card" id="tts-error-card" style="display:none">
-        <div class="result-card-header">⚠️ Error</div>
-        <div class="result-card-body"><div class="error-box" id="tts-error-msg"></div></div>
-      </div>
-
-      <div class="result-card" id="tts-main-card" style="display:none">
-        <div class="result-card-header">🎧 Generated Audio</div>
-        <div class="result-card-body">
-          <div class="audio-player">
-            <audio id="tts-audio" controls></audio>
-            <div class="btn-row" style="margin-top:0">
-              <a id="tts-download" class="btn btn-ghost" download="speech.mp3">⬇ Download MP3</a>
+          <div class="result-card" id="tts-main-card" style="display:none">
+            <div class="result-card-header">🎧 Generated Audio</div>
+            <div class="result-card-body">
+              <div class="audio-player">
+                <audio id="tts-audio" controls></audio>
+                <div class="btn-row" style="margin-top:0">
+                  <a id="tts-download" class="btn btn-ghost" download="speech.mp3">⬇ Download MP3</a>
+                </div>
+              </div>
+              <div class="divider"></div>
+              <div class="badges" id="tts-badges"></div>
             </div>
           </div>
-          <div class="divider"></div>
-          <div class="badges" id="tts-badges"></div>
+        </div>
+
+        <div class="workbench-empty" id="tts-empty">
+          <div class="workbench-empty-icon">🎧</div>
+          Your generated audio will appear here.
         </div>
       </div>
     </div>
   </div>
 
   <!-- ── IDP Panel ── -->
-  <div class="panel" id="panel-idp">
+  <div class="panel panel--wide" id="panel-idp">
     <div class="panel-header">
       <a class="back-home-btn" onclick="showPanel('home')">← Home</a>
-      <h1>📄 Document Analysis</h1>
-      <p>Upload a JPG or PNG image of any document — ID card, passport, invoice, receipt. GPT-4o will extract all visible fields.</p>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Document Image</div>
-      <div class="upload-zone" id="idp-zone">
-        <input type="file" id="idp-file" accept=".jpg,.jpeg,.png,image/jpeg,image/png" onchange="onIDPFile(this)" />
-        <div class="upload-icon">🖼️</div>
-        <p>Drag & drop or click to upload</p>
-        <p style="font-size:0.78rem;margin-top:4px;color:var(--text2)">JPG or PNG · max 10 MB</p>
-        <div class="file-name" id="idp-fname"></div>
-      </div>
-      <div class="img-preview" id="idp-preview" onclick="openLightbox()">
-        <img id="idp-img" src="" alt="Document preview" />
-        <canvas id="idp-canvas"></canvas>
-        <span class="zoom-hint">🔍 Click to zoom</span>
-      </div>
-      <div class="btn-row">
-        <button class="btn btn-primary" id="idp-btn" onclick="runIDP()" disabled>
-          Analyze Document
-        </button>
+      <div class="panel-eyebrow">03 · POST /idp/analyze</div>
+      <div class="panel-head">
+        <div class="panel-head-icon">📄</div>
+        <div class="panel-head-body">
+          <h1>Document Analysis</h1>
+          <p>Upload a JPG or PNG image of any document — ID card, passport, invoice, receipt. GPT-4o will extract all visible fields.</p>
+        </div>
       </div>
     </div>
 
-    <div class="results" id="idp-results">
-      <div class="result-card" id="idp-error-card" style="display:none">
-        <div class="result-card-header">⚠️ Error</div>
-        <div class="result-card-body"><div class="error-box" id="idp-error-msg"></div></div>
-      </div>
-
-      <div class="result-card" id="idp-main-card" style="display:none">
-        <div class="result-card-header">🔍 Extracted Information</div>
-        <div class="result-card-body">
-          <div class="badges" id="idp-badges"></div>
-          <table class="fields-table" id="idp-table"></table>
+    <div class="workbench">
+      <div class="card">
+        <div class="card-title">Document Image</div>
+        <div class="upload-zone" id="idp-zone">
+          <input type="file" id="idp-file" accept=".jpg,.jpeg,.png,image/jpeg,image/png" onchange="onIDPFile(this)" />
+          <div class="upload-icon">🖼️</div>
+          <p>Drag & drop or click to upload</p>
+          <p style="font-size:0.78rem;margin-top:4px;color:var(--text2)">JPG or PNG · max 10 MB</p>
+          <div class="file-name" id="idp-fname"></div>
+        </div>
+        <div class="img-preview" id="idp-preview" onclick="openLightbox()">
+          <img id="idp-img" src="" alt="Document preview" />
+          <canvas id="idp-canvas"></canvas>
+          <span class="zoom-hint">🔍 Click to zoom</span>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-primary" id="idp-btn" onclick="runIDP()" disabled style="width:100%">
+            Analyze Document
+          </button>
         </div>
       </div>
 
-      <div class="result-card" id="idp-json-card" style="display:none">
-        <div class="result-card-header" style="justify-content:space-between">
-          <span>{ } Raw JSON</span>
-          <button class="json-toggle" onclick="toggleJson('idp-json', this)">Show JSON ▾</button>
+      <div>
+        <div class="results" id="idp-results">
+          <div class="result-card" id="idp-error-card" style="display:none">
+            <div class="result-card-header">⚠️ Error</div>
+            <div class="result-card-body"><div class="error-box" id="idp-error-msg"></div></div>
+          </div>
+
+          <div class="result-card" id="idp-main-card" style="display:none">
+            <div class="result-card-header">🔍 Extracted Information</div>
+            <div class="result-card-body">
+              <div class="badges" id="idp-badges"></div>
+              <table class="fields-table" id="idp-table"></table>
+            </div>
+          </div>
+
+          <div class="result-card" id="idp-json-card" style="display:none">
+            <div class="result-card-header" style="justify-content:space-between">
+              <span>{ } Raw JSON</span>
+              <button class="json-toggle" onclick="toggleJson('idp-json', this)">Show JSON ▾</button>
+            </div>
+            <div class="result-card-body" style="padding-top:8px">
+              <pre class="json-block" id="idp-json"></pre>
+            </div>
+          </div>
         </div>
-        <div class="result-card-body" style="padding-top:8px">
-          <pre class="json-block" id="idp-json"></pre>
+
+        <div class="workbench-empty" id="idp-empty">
+          <div class="workbench-empty-icon">🔍</div>
+          Extracted fields will appear here once you analyze a document.
         </div>
       </div>
     </div>
@@ -1128,8 +1427,14 @@
   <div class="panel panel--wide" id="panel-db">
     <div class="panel-header">
       <a class="back-home-btn" onclick="showPanel('home')">← Home</a>
-      <h1>🗄️ Database</h1>
-      <p>Live view of all API requests tracked in PostgreSQL — every field required by the assessment.</p>
+      <div class="panel-eyebrow">05 · GET /logs</div>
+      <div class="panel-head">
+        <div class="panel-head-icon">🗄️</div>
+        <div class="panel-head-body">
+          <h1>Database</h1>
+          <p>Live view of all API requests tracked in PostgreSQL — every field required by the assessment.</p>
+        </div>
+      </div>
     </div>
 
     <div class="card db-key-card">
@@ -1175,8 +1480,14 @@
   <div class="panel" id="panel-docs">
     <div class="panel-header">
       <a class="back-home-btn" onclick="showPanel('home')">← Home</a>
-      <h1>📖 Documentation</h1>
-      <p>A complete guide for someone who has never built with an API before — from first concepts to running your first request.</p>
+      <div class="panel-eyebrow">06 · Reference</div>
+      <div class="panel-head">
+        <div class="panel-head-icon">📖</div>
+        <div class="panel-head-body">
+          <h1>Documentation</h1>
+          <p>A complete guide for someone who has never built with an API before — from first concepts to running your first request.</p>
+        </div>
+      </div>
     </div>
 
     <!-- Quick overview -->
@@ -1205,7 +1516,10 @@
 
     <!-- ══ SECTION: Core concepts ══ -->
     <div class="doc-section">
-      <div class="card-title" style="margin-bottom:14px">📚 Before You Start — Core Concepts</div>
+      <div class="doc-section-head">
+        <span class="doc-section-num">01</span>
+        <div class="card-title" style="margin-bottom:0">📚 Before You Start — Core Concepts</div>
+      </div>
       <p style="font-size:.85rem;color:var(--text2);line-height:1.7;margin-bottom:16px">
         If this is your first time working with an API, read this section first. Everything in this documentation will make much more sense once you understand these five ideas.
       </p>
@@ -1282,7 +1596,10 @@
 
     <!-- ══ SECTION: Authentication ══ -->
     <div class="doc-section">
-      <div class="card-title">🔐 Authentication — How to Prove You Have Access</div>
+      <div class="doc-section-head">
+        <span class="doc-section-num">02</span>
+        <div class="card-title" style="margin-bottom:0">🔐 Authentication — How to Prove You Have Access</div>
+      </div>
       <div class="doc-auth-bar">
         <strong>Speech-to-Text, Text-to-Speech and Document Analysis are open endpoints</strong> — no API key required. They're built for this public demo, so you can call <code style="background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px">/stt</code>, <code style="background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px">/tts</code> and <code style="background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px">/idp/analyze</code> directly, with no header at all.<br><br>
         The <strong>request logs / database endpoint</strong> (<code style="background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px">/logs</code>) is the one exception — it's an admin/owner-only view, so it still requires an API Key sent as a header.<br><br>
@@ -1296,7 +1613,10 @@
 
     <!-- ══ SECTION: Quick Start ══ -->
     <div class="doc-section">
-      <div class="card-title" style="margin-bottom:14px">🚀 Quick Start — Three Ways to Make Your First Request</div>
+      <div class="doc-section-head">
+        <span class="doc-section-num">03</span>
+        <div class="card-title" style="margin-bottom:0">🚀 Quick Start — Three Ways to Make Your First Request</div>
+      </div>
 
       <div class="card" style="margin-bottom:14px">
         <div class="doc-box-label" style="margin-bottom:14px">Option A — Use this website (no setup needed)</div>
@@ -1428,7 +1748,10 @@ print("Logged requests:", len(response.json()))</div>
 
     <!-- ══ SECTION: Endpoint 1 STT ══ -->
     <div class="doc-section">
-      <div class="card-title" style="margin-bottom:14px">Endpoint 1 — Speech-to-Text (STT)</div>
+      <div class="doc-section-head">
+        <span class="doc-section-num">04</span>
+        <div class="card-title" style="margin-bottom:0">Endpoint 1 — Speech-to-Text (STT)</div>
+      </div>
       <div class="doc-endpoint-card">
         <div class="doc-endpoint-header">
           <span class="doc-method post">POST</span>
@@ -1532,7 +1855,10 @@ print("Logged requests:", len(response.json()))</div>
 
     <!-- ══ SECTION: Endpoint 2 TTS ══ -->
     <div class="doc-section">
-      <div class="card-title" style="margin-bottom:14px">Endpoint 2 — Text-to-Speech (TTS)</div>
+      <div class="doc-section-head">
+        <span class="doc-section-num">05</span>
+        <div class="card-title" style="margin-bottom:0">Endpoint 2 — Text-to-Speech (TTS)</div>
+      </div>
       <div class="doc-endpoint-card">
         <div class="doc-endpoint-header">
           <span class="doc-method post">POST</span>
@@ -1631,7 +1957,10 @@ print("Logged requests:", len(response.json()))</div>
 
     <!-- ══ SECTION: Endpoint 3 IDP ══ -->
     <div class="doc-section">
-      <div class="card-title" style="margin-bottom:14px">Endpoint 3 — Intelligent Document Processing (IDP)</div>
+      <div class="doc-section-head">
+        <span class="doc-section-num">06</span>
+        <div class="card-title" style="margin-bottom:0">Endpoint 3 — Intelligent Document Processing (IDP)</div>
+      </div>
       <div class="doc-endpoint-card">
         <div class="doc-endpoint-header">
           <span class="doc-method post">POST</span>
@@ -1744,7 +2073,10 @@ print("Logged requests:", len(response.json()))</div>
 
     <!-- ══ SECTION: Endpoint 4 Logs ══ -->
     <div class="doc-section">
-      <div class="card-title" style="margin-bottom:14px">Endpoint 4 — Request Logs</div>
+      <div class="doc-section-head">
+        <span class="doc-section-num">07</span>
+        <div class="card-title" style="margin-bottom:0">Endpoint 4 — Request Logs</div>
+      </div>
       <div class="doc-endpoint-card">
         <div class="doc-endpoint-header">
           <span class="doc-method get">GET</span>
@@ -1804,7 +2136,10 @@ print("Logged requests:", len(response.json()))</div>
 
     <!-- ══ SECTION: Endpoint 5 Health ══ -->
     <div class="doc-section">
-      <div class="card-title" style="margin-bottom:14px">Endpoint 5 — Health Check</div>
+      <div class="doc-section-head">
+        <span class="doc-section-num">08</span>
+        <div class="card-title" style="margin-bottom:0">Endpoint 5 — Health Check</div>
+      </div>
       <div class="doc-endpoint-card">
         <div class="doc-endpoint-header">
           <span class="doc-method get">GET</span>
@@ -1834,7 +2169,10 @@ print("Logged requests:", len(response.json()))</div>
 
     <!-- ══ SECTION: Common Errors ══ -->
     <div class="doc-section">
-      <div class="card-title" style="margin-bottom:14px">⚠️ Common Errors and What They Mean</div>
+      <div class="doc-section-head">
+        <span class="doc-section-num">09</span>
+        <div class="card-title" style="margin-bottom:0">⚠️ Common Errors and What They Mean</div>
+      </div>
       <div class="card" style="padding:0;overflow:hidden">
         <table class="doc-error-table">
           <thead>
@@ -1896,10 +2234,16 @@ print("Logged requests:", len(response.json()))</div>
   <div class="panel panel--wide" id="panel-architecture">
     <div class="panel-header">
       <a class="back-home-btn" onclick="showPanel('home')">← Home</a>
-      <h1>🧩 Architecture</h1>
-      <p>One FastAPI service sits between the browser and two external AI providers, logging every
-      call to a managed Postgres database. Three endpoints are open to anyone; only
-      <code>/logs</code> — request history — sits behind an API key.</p>
+      <div class="panel-eyebrow">07 · System design</div>
+      <div class="panel-head">
+        <div class="panel-head-icon">🧩</div>
+        <div class="panel-head-body">
+          <h1>Architecture</h1>
+          <p>One FastAPI service sits between the browser and two external AI providers, logging every
+          call to a managed Postgres database. Three endpoints are open to anyone; only
+          <code>/logs</code> — request history — sits behind an API key.</p>
+        </div>
+      </div>
     </div>
 
     <div class="doc-section">
@@ -2050,13 +2394,20 @@ print("Logged requests:", len(response.json()))</div>
   <div class="panel" id="panel-health">
     <div class="panel-header">
       <a class="back-home-btn" onclick="showPanel('home')">← Home</a>
-      <h1>💚 Health Check</h1>
-      <p>Verify the API service is running and reachable.</p>
+      <div class="panel-eyebrow">04 · GET /health</div>
+      <div class="panel-head">
+        <div class="panel-head-icon">💚</div>
+        <div class="panel-head-body">
+          <h1>Health Check</h1>
+          <p>Verify the API service is running and reachable — the same probe a deployment pipeline or uptime monitor would call.</p>
+        </div>
+      </div>
     </div>
 
     <div class="card">
       <div class="card-title">Service Status</div>
-      <div class="btn-row">
+      <div class="doc-code" style="display:inline-block;margin-bottom:var(--space-2)">GET /health</div>
+      <div class="btn-row" style="margin-top:var(--space-3)">
         <button class="btn btn-primary" onclick="runHealth()">Check Status</button>
       </div>
     </div>
@@ -2769,21 +3120,25 @@ print("Logged requests:", len(response.json()))</div>
 
       document.getElementById('db-stats').innerHTML = `
         <div class="db-stat-card">
+          <div class="stat-icon">📊</div>
           <div class="db-stat-label">Total Requests</div>
           <div class="db-stat-value">${total}</div>
           <div class="db-stat-sub">in database</div>
         </div>
         <div class="db-stat-card">
+          <div class="stat-icon">⏱</div>
           <div class="db-stat-label">Avg Latency</div>
           <div class="db-stat-value">${avgLat}<span style="font-size:.8rem;font-weight:400"> ms</span></div>
           <div class="db-stat-sub">end-to-end</div>
         </div>
         <div class="db-stat-card">
+          <div class="stat-icon">🔥</div>
           <div class="db-stat-label">Most Used</div>
           <div class="db-stat-value" style="font-size:1rem">${topEp ? topEp[0] : '—'}</div>
           <div class="db-stat-sub">${topEp ? topEp[1] + ' calls' : ''}</div>
         </div>
         <div class="db-stat-card">
+          <div class="stat-icon">🧩</div>
           <div class="db-stat-label">Endpoints</div>
           <div class="db-stat-value">${Object.keys(byEp).length}</div>
           <div class="db-stat-sub">distinct</div>
@@ -2808,7 +3163,7 @@ print("Logged requests:", len(response.json()))</div>
         <tr>
           <td class="mono" style="color:var(--text2)">${r.id}</td>
           <td style="white-space:nowrap;font-size:0.75rem">${fmtDate(r.timestamp)}</td>
-          <td><span class="endpoint-tag" style="background:${epColor[r.endpoint]+'22'||'rgba(88,166,255,.12)'};color:${epColor[r.endpoint]||'var(--accent)'}">${r.endpoint}</span></td>
+          <td><span class="endpoint-tag" style="background:${epColor[r.endpoint]+'22'||'rgba(226,131,63,.12)'};color:${epColor[r.endpoint]||'var(--accent)'}">${r.endpoint}</span></td>
           <td class="mono">${truncate(r.input_data, 60)}</td>
           <td class="mono" style="color:var(--text2)">${truncate(r.output_ref, 80)}</td>
           <td class="mono" style="color:var(--text2);font-size:0.72rem">${r.external_usage ? r.external_usage.replace(/,/g,'<br>') : '—'}</td>
